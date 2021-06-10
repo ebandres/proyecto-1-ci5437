@@ -1,0 +1,13 @@
+# 2x2 sliding puzzle representation
+
+DOMAIN tile 4 
+	   b 1 2 3
+4
+tile tile tile tile
+
+b X - - => X b - - 
+b - X - => X - b - 
+- b - X => - X - b 
+- - b X => - - X b 
+
+GOAL b 1 2 3 

@@ -1,0 +1,1 @@
+Para probar se puede compilar con "g++ main.cpp clases.cpp -include sliding_tile2x2.c -o main" 
