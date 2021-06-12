@@ -59,6 +59,7 @@ list<pair<State,Action>> State::succesors() {
 		//print_state(stdout, &child);
 		childSt.state = child;
 		childSt.ruleid = idRule;
+		childSt.move = "fwd";
 		listPair.push_back(make_pair(childSt,idRule));
 	}
 
@@ -70,6 +71,7 @@ list<pair<State,Action>> State::succesors() {
 		//print_state(stdout, &child);
 		childSt.state = child;
 		childSt.ruleid = idRule;
+		childSt.move = "bwd";
 		listPair.push_back(make_pair(childSt,idRule));
 	}
 

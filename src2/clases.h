@@ -22,6 +22,7 @@ class State {
 	state_t state;
 	ruleid_iterator_t iter;
 	int  ruleid;
+	char move[4];
 
 	bool isGoalState();
 	list<pair<State,Action>> succesors();
