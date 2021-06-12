@@ -17,47 +17,58 @@ def generate_npuzzle(n):
         for i in range(n):
             base += [["-"] * n]
 
+        seen = set()
+
         for y in range(n):
             for x in range(n):
                 # For each tile there are 4 possible cases
                 # LEFT check x - 1 >= 0
                 if x - 1 >= 0:
-                    write_rule(x, y, x - 1, y, file, copy.deepcopy(base))
+                    write_rule(x, y, x - 1, y, file, copy.deepcopy(base), seen)
                 
                 # RIGHT check x + 1 < n
                 if x + 1 < n:
-                    write_rule(x, y, x + 1, y, file, copy.deepcopy(base))
+                    write_rule(x, y, x + 1, y, file, copy.deepcopy(base), seen)
 
                 # UP check y - 1 >= 0
                 if y - 1 >= 0:
-                    write_rule(x, y, x, y - 1, file, copy.deepcopy(base))
+                    write_rule(x, y, x, y - 1, file, copy.deepcopy(base), seen)
 
                 # DOWN check y + 1 < n
                 if y + 1 < n:
-                    write_rule(x, y, x, y + 1, file, copy.deepcopy(base))
+                    write_rule(x, y, x, y + 1, file, copy.deepcopy(base), seen)
         
         file.write("\nGOAL b")
         for i in range(1, ns + 1):
             file.write(f" {i}")
 
-def write_rule(x, y, xt, yt, f, grid):
+def write_rule(x, y, xt, yt, f, grid, seen_set):
     grid[y][x] = "b"        # Mark the blank
     grid[yt][xt] = "X"    # Mark slide target
 
+    lhs = ""
+    rhs = ""
+
     for row in grid:
         for i in row:
-            f.write(f"{i} ")
-
-    f.write("=> ")
+            lhs += f"{i} "
 
     grid[y][x] = "X"
     grid[yt][xt] = "b"
 
     for row in grid:
         for i in row:
-            f.write(f"{i} ")
+            rhs += f"{i} "
 
-    f.write("\n")
+    rule = lhs + "=> " + rhs
+    inverse_rule = rhs + "=> " + lhs
+
+    if rule not in seen_set:
+        f.write(rule)
+        seen_set.add(rule)
+        seen_set.add(inverse_rule)
+        f.write("\n")
+
 
 if __name__ == "__main__":
     try:

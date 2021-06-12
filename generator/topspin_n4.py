@@ -17,7 +17,7 @@ def flip(my_list, i, x):
 
 
 def generate_topspin(n):
-    with open(f"../puzzles/topspin_{n}4.psvn", 'w') as file:
+    with open(f"../puzzles/topspin_{n}_4.psvn", 'w') as file:
         file.write(f"{n}\n\n" + f"{n} " * n + "\n\n")
 
         tokens = ["X1", "X2", "X3", "X4"]
