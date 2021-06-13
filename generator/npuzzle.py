@@ -6,7 +6,7 @@ def generate_npuzzle(n):
 
     with open(f"../puzzles/{ns - 1}puzzle.psvn", 'w') as file:
         file.write(f"DOMAIN tile {ns}\nb")
-        for i in range(1, ns + 1):
+        for i in range(1, ns):
             file.write(f" {i}")
 
         file.write(f"\n\n{ns} {'tile ' * ns}\n\n")
@@ -17,32 +17,30 @@ def generate_npuzzle(n):
         for i in range(n):
             base += [["-"] * n]
 
-        seen = set()
-
         for y in range(n):
             for x in range(n):
                 # For each tile there are 4 possible cases
                 # LEFT check x - 1 >= 0
                 if x - 1 >= 0:
-                    write_rule(x, y, x - 1, y, file, copy.deepcopy(base), seen)
+                    write_rule(x, y, x - 1, y, file, copy.deepcopy(base))
                 
                 # RIGHT check x + 1 < n
                 if x + 1 < n:
-                    write_rule(x, y, x + 1, y, file, copy.deepcopy(base), seen)
+                    write_rule(x, y, x + 1, y, file, copy.deepcopy(base))
 
                 # UP check y - 1 >= 0
                 if y - 1 >= 0:
-                    write_rule(x, y, x, y - 1, file, copy.deepcopy(base), seen)
+                    write_rule(x, y, x, y - 1, file, copy.deepcopy(base))
 
                 # DOWN check y + 1 < n
                 if y + 1 < n:
-                    write_rule(x, y, x, y + 1, file, copy.deepcopy(base), seen)
+                    write_rule(x, y, x, y + 1, file, copy.deepcopy(base))
         
         file.write("\nGOAL b")
-        for i in range(1, ns + 1):
+        for i in range(1, ns):
             file.write(f" {i}")
 
-def write_rule(x, y, xt, yt, f, grid, seen_set):
+def write_rule(x, y, xt, yt, f, grid):
     grid[y][x] = "b"        # Mark the blank
     grid[yt][xt] = "X"    # Mark slide target
 
@@ -61,13 +59,8 @@ def write_rule(x, y, xt, yt, f, grid, seen_set):
             rhs += f"{i} "
 
     rule = lhs + "=> " + rhs
-    inverse_rule = rhs + "=> " + lhs
 
-    if rule not in seen_set:
-        f.write(rule)
-        seen_set.add(rule)
-        seen_set.add(inverse_rule)
-        f.write("\n")
+    f.write(rule + "\n")
 
 
 if __name__ == "__main__":

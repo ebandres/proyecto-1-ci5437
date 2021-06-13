@@ -6,8 +6,6 @@ def generate_hanoi(n, m):
         file.write(f"{nm}\n")
         file.write("2 " * nm + "\n\n")
 
-        seen = set()
-
         for disc in range(1, m + 1): # Iterate through discs
             for i in range(1, n + 1): 
                 peg_from = i
@@ -36,13 +34,7 @@ def generate_hanoi(n, m):
                         left += " "
                         right += " "
 
-                    rule = left + "=> " + right
-                    inverse_rule = right + "=> " + left
-                    if rule not in seen:
-                        file.write(rule)
-                        seen.add(rule)
-                        seen.add(inverse_rule)
-                        file.write("\n")
+                    file.write(left + "=> " + right + "\n")
 
             file.write("\n")
 
