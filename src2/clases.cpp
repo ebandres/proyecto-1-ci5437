@@ -21,25 +21,13 @@ list<pair<State,Action>> State::succesors() {
 	init_fwd_iter( &iter, &state );
 
 	while ((idRule=next_ruleid(&iter)) >= 0) {
+
 		state_t child;
 		State childSt;
 		apply_fwd_rule( idRule,&state,&child );
 		//print_state(stdout, &child);
 		childSt.state = child;
 		childSt.ruleid = idRule;
-		childSt.move = "fwd";
-		listPair.push_back(make_pair(childSt,idRule));
-	}
-
-	init_bwd_iter( &iter, &state );
-	while ((idRule=next_ruleid(&iter)) >= 0) {
-		state_t child;
-		State childSt;
-		apply_bwd_rule( idRule,&state,&child );
-		//print_state(stdout, &child);
-		childSt.state = child;
-		childSt.ruleid = idRule;
-		childSt.move = "bwd";
 		listPair.push_back(make_pair(childSt,idRule));
 	}
 

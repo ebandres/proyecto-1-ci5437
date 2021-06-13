@@ -45,11 +45,11 @@ typedef struct {
  funcptr my_funcptr;
 } ruleid_iterator_t;
 
-#define num_fwd_rules 4
-#define num_bwd_rules 4
-static const char *fwd_rule_name[ 4 ] = { "rule_1", "rule_2", "rule_3", "rule_4" };
+#define num_fwd_rules 8
+#define num_bwd_rules 8
+static const char *fwd_rule_name[ 8 ] = { "rule_1", "rule_2", "rule_3", "rule_4", "rule_5", "rule_6", "rule_7", "rule_8" };
 #define get_fwd_rule_label( ruleid ) (fwd_rule_name[(ruleid)]) 
-static const char *bwd_rule_name[ 4 ] = { "rule_1", "rule_2", "rule_3", "rule_4" };
+static const char *bwd_rule_name[ 8 ] = { "rule_1", "rule_2", "rule_3", "rule_4", "rule_5", "rule_6", "rule_7", "rule_8" };
 #define get_bwd_rule_label( ruleid ) (bwd_rule_name[(ruleid)]) 
 #define cost_of_cheapest_fwd_rule 1
 #define cost_of_costliest_fwd_rule 1
@@ -58,11 +58,11 @@ static const char *bwd_rule_name[ 4 ] = { "rule_1", "rule_2", "rule_3", "rule_4"
 #define cost_of_costliest_bwd_rule 1
 #define get_bwd_rule_cost( ruleid ) 1
 
-static int fwd_rule_label_sets[16] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
+static int fwd_rule_label_sets[32] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
 
-static int bwd_rule_label_sets[16] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
+static int bwd_rule_label_sets[32] = {0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,1,2,3};
 
-static int fwd_prune_table[ 20 ] = { 4, 8, 12, 16, 0, 0, 12, 16, 0, 0, 12, 16, 4, 0, 0, 0, 0, 8, 0, 0 };
+static int fwd_prune_table[ 72 ] = { 8, 16, 24, 32, 40, 48, 56, 64, 0, 0, 0, 32, 40, 0, 56, 64, 0, 0, 24, 0, 0, 48, 56, 64, 0, 16, 0, 0, 40, 48, 56, 0, 8, 0, 0, 0, 40, 48, 0, 64, 8, 0, 0, 0, 0, 0, 0, 64, 0, 16, 0, 0, 0, 0, 56, 0, 0, 0, 24, 0, 0, 48, 0, 0, 0, 0, 0, 32, 40, 0, 0, 0 };
 
 static void fwdrule1( const state_t *state, state_t *child_state )
 {
@@ -74,13 +74,29 @@ static void fwdrule1( const state_t *state, state_t *child_state )
 
 static void fwdrule2( const state_t *state, state_t *child_state )
 {
+  child_state->vars[ 0 ] = 0;
+  child_state->vars[ 1 ] = state->vars[ 0 ];
+  child_state->vars[ 2 ] = state->vars[ 2 ];
+  child_state->vars[ 3 ] = state->vars[ 3 ];
+}
+
+static void fwdrule3( const state_t *state, state_t *child_state )
+{
   child_state->vars[ 0 ] = state->vars[ 2 ];
   child_state->vars[ 1 ] = state->vars[ 1 ];
   child_state->vars[ 2 ] = 0;
   child_state->vars[ 3 ] = state->vars[ 3 ];
 }
 
-static void fwdrule3( const state_t *state, state_t *child_state )
+static void fwdrule4( const state_t *state, state_t *child_state )
+{
+  child_state->vars[ 0 ] = 0;
+  child_state->vars[ 1 ] = state->vars[ 1 ];
+  child_state->vars[ 2 ] = state->vars[ 0 ];
+  child_state->vars[ 3 ] = state->vars[ 3 ];
+}
+
+static void fwdrule5( const state_t *state, state_t *child_state )
 {
   child_state->vars[ 0 ] = state->vars[ 0 ];
   child_state->vars[ 1 ] = state->vars[ 3 ];
@@ -88,7 +104,15 @@ static void fwdrule3( const state_t *state, state_t *child_state )
   child_state->vars[ 3 ] = 0;
 }
 
-static void fwdrule4( const state_t *state, state_t *child_state )
+static void fwdrule6( const state_t *state, state_t *child_state )
+{
+  child_state->vars[ 0 ] = state->vars[ 0 ];
+  child_state->vars[ 1 ] = 0;
+  child_state->vars[ 2 ] = state->vars[ 2 ];
+  child_state->vars[ 3 ] = state->vars[ 1 ];
+}
+
+static void fwdrule7( const state_t *state, state_t *child_state )
 {
   child_state->vars[ 0 ] = state->vars[ 0 ];
   child_state->vars[ 1 ] = state->vars[ 1 ];
@@ -96,45 +120,81 @@ static void fwdrule4( const state_t *state, state_t *child_state )
   child_state->vars[ 3 ] = 0;
 }
 
-static actfuncptr fwd_rules[ 4 ] = { fwdrule1, fwdrule2, fwdrule3, fwdrule4 };
-
-static int fwdfn2_a0_1( const state_t *state, void *next_func )
+static void fwdrule8( const state_t *state, state_t *child_state )
 {
-  *((funcptr *)next_func) = NULL;
-  return 1;
+  child_state->vars[ 0 ] = state->vars[ 0 ];
+  child_state->vars[ 1 ] = state->vars[ 1 ];
+  child_state->vars[ 2 ] = 0;
+  child_state->vars[ 3 ] = state->vars[ 2 ];
 }
 
-static int fwdfn2( const state_t *state, void *next_func )
+static actfuncptr fwd_rules[ 8 ] = { fwdrule1, fwdrule2, fwdrule3, fwdrule4, fwdrule5, fwdrule6, fwdrule7, fwdrule8 };
+
+static int fwdfn3_a0_1( const state_t *state, void *next_func )
 {
-  if( state->vars[ 0 ] == 0 ) {
-    *((funcptr *)next_func) = fwdfn2_a0_1;
-    return 0;
+  *((funcptr *)next_func) = NULL;
+  return 7;
+}
+
+static int fwdfn3( const state_t *state, void *next_func )
+{
+  if( state->vars[ 3 ] == 0 ) {
+    *((funcptr *)next_func) = fwdfn3_a0_1;
+    return 5;
   } else {
     return -1;
   }
 }
 
-static int fwdfn1( const state_t *state, void *next_func )
+static int fwdfn2_a0_1( const state_t *state, void *next_func )
+{
+  *((funcptr *)next_func) = fwdfn3;
+  return 6;
+}
+
+static int fwdfn2( const state_t *state, void *next_func )
 {
   if( state->vars[ 2 ] == 0 ) {
-    *((funcptr *)next_func) = fwdfn2;
+    *((funcptr *)next_func) = fwdfn2_a0_1;
     return 3;
+  } else {
+    return fwdfn3( state, next_func );
+  }
+}
+
+static int fwdfn1_a0_1( const state_t *state, void *next_func )
+{
+  *((funcptr *)next_func) = fwdfn2;
+  return 4;
+}
+
+static int fwdfn1( const state_t *state, void *next_func )
+{
+  if( state->vars[ 1 ] == 0 ) {
+    *((funcptr *)next_func) = fwdfn1_a0_1;
+    return 1;
   } else {
     return fwdfn2( state, next_func );
   }
 }
 
+static int fwdfn0_a0_1( const state_t *state, void *next_func )
+{
+  *((funcptr *)next_func) = fwdfn1;
+  return 2;
+}
+
 static int fwdfn0( const state_t *state, void *next_func )
 {
-  if( state->vars[ 1 ] == 0 ) {
-    *((funcptr *)next_func) = fwdfn1;
-    return 2;
+  if( state->vars[ 0 ] == 0 ) {
+    *((funcptr *)next_func) = fwdfn0_a0_1;
+    return 0;
   } else {
     return fwdfn1( state, next_func );
   }
 }
 
-static int bwd_prune_table[ 20 ] = { 4, 8, 12, 16, 0, 0, 12, 16, 0, 0, 12, 16, 4, 0, 0, 0, 0, 8, 0, 0 };
+static int bwd_prune_table[ 72 ] = { 8, 16, 24, 32, 40, 48, 56, 64, 0, 0, 0, 32, 40, 0, 56, 64, 0, 0, 24, 0, 0, 48, 56, 64, 0, 16, 0, 0, 40, 48, 56, 0, 8, 0, 0, 0, 40, 48, 0, 64, 8, 0, 0, 0, 0, 0, 0, 64, 0, 16, 0, 0, 0, 0, 56, 0, 0, 0, 24, 0, 0, 48, 0, 0, 0, 0, 0, 32, 40, 0, 0, 0 };
 
 static void bwdrule1( const state_t *state, state_t *child_state )
 {
@@ -146,13 +206,29 @@ static void bwdrule1( const state_t *state, state_t *child_state )
 
 static void bwdrule2( const state_t *state, state_t *child_state )
 {
+  child_state->vars[ 0 ] = state->vars[ 1 ];
+  child_state->vars[ 1 ] = 0;
+  child_state->vars[ 2 ] = state->vars[ 2 ];
+  child_state->vars[ 3 ] = state->vars[ 3 ];
+}
+
+static void bwdrule3( const state_t *state, state_t *child_state )
+{
   child_state->vars[ 0 ] = 0;
   child_state->vars[ 1 ] = state->vars[ 1 ];
   child_state->vars[ 2 ] = state->vars[ 0 ];
   child_state->vars[ 3 ] = state->vars[ 3 ];
 }
 
-static void bwdrule3( const state_t *state, state_t *child_state )
+static void bwdrule4( const state_t *state, state_t *child_state )
+{
+  child_state->vars[ 0 ] = state->vars[ 2 ];
+  child_state->vars[ 1 ] = state->vars[ 1 ];
+  child_state->vars[ 2 ] = 0;
+  child_state->vars[ 3 ] = state->vars[ 3 ];
+}
+
+static void bwdrule5( const state_t *state, state_t *child_state )
 {
   child_state->vars[ 0 ] = state->vars[ 0 ];
   child_state->vars[ 1 ] = 0;
@@ -160,7 +236,15 @@ static void bwdrule3( const state_t *state, state_t *child_state )
   child_state->vars[ 3 ] = state->vars[ 1 ];
 }
 
-static void bwdrule4( const state_t *state, state_t *child_state )
+static void bwdrule6( const state_t *state, state_t *child_state )
+{
+  child_state->vars[ 0 ] = state->vars[ 0 ];
+  child_state->vars[ 1 ] = state->vars[ 3 ];
+  child_state->vars[ 2 ] = state->vars[ 2 ];
+  child_state->vars[ 3 ] = 0;
+}
+
+static void bwdrule7( const state_t *state, state_t *child_state )
 {
   child_state->vars[ 0 ] = state->vars[ 0 ];
   child_state->vars[ 1 ] = state->vars[ 1 ];
@@ -168,38 +252,74 @@ static void bwdrule4( const state_t *state, state_t *child_state )
   child_state->vars[ 3 ] = state->vars[ 2 ];
 }
 
-static actfuncptr bwd_rules[ 4 ] = { bwdrule1, bwdrule2, bwdrule3, bwdrule4 };
-
-static int bwdfn2_a0_1( const state_t *state, void *next_func )
+static void bwdrule8( const state_t *state, state_t *child_state )
 {
-  *((funcptr *)next_func) = NULL;
-  return 3;
+  child_state->vars[ 0 ] = state->vars[ 0 ];
+  child_state->vars[ 1 ] = state->vars[ 1 ];
+  child_state->vars[ 2 ] = state->vars[ 3 ];
+  child_state->vars[ 3 ] = 0;
 }
 
-static int bwdfn2( const state_t *state, void *next_func )
+static actfuncptr bwd_rules[ 8 ] = { bwdrule1, bwdrule2, bwdrule3, bwdrule4, bwdrule5, bwdrule6, bwdrule7, bwdrule8 };
+
+static int bwdfn3_a0_1( const state_t *state, void *next_func )
+{
+  *((funcptr *)next_func) = NULL;
+  return 6;
+}
+
+static int bwdfn3( const state_t *state, void *next_func )
 {
   if( state->vars[ 3 ] == 0 ) {
-    *((funcptr *)next_func) = bwdfn2_a0_1;
-    return 2;
+    *((funcptr *)next_func) = bwdfn3_a0_1;
+    return 4;
   } else {
     return -1;
   }
 }
 
-static int bwdfn1( const state_t *state, void *next_func )
+static int bwdfn2_a0_1( const state_t *state, void *next_func )
+{
+  *((funcptr *)next_func) = bwdfn3;
+  return 7;
+}
+
+static int bwdfn2( const state_t *state, void *next_func )
 {
   if( state->vars[ 2 ] == 0 ) {
-    *((funcptr *)next_func) = bwdfn2;
+    *((funcptr *)next_func) = bwdfn2_a0_1;
+    return 2;
+  } else {
+    return bwdfn3( state, next_func );
+  }
+}
+
+static int bwdfn1_a0_1( const state_t *state, void *next_func )
+{
+  *((funcptr *)next_func) = bwdfn2;
+  return 3;
+}
+
+static int bwdfn1( const state_t *state, void *next_func )
+{
+  if( state->vars[ 0 ] == 0 ) {
+    *((funcptr *)next_func) = bwdfn1_a0_1;
     return 1;
   } else {
     return bwdfn2( state, next_func );
   }
 }
 
+static int bwdfn0_a0_1( const state_t *state, void *next_func )
+{
+  *((funcptr *)next_func) = bwdfn1;
+  return 5;
+}
+
 static int bwdfn0( const state_t *state, void *next_func )
 {
   if( state->vars[ 1 ] == 0 ) {
-    *((funcptr *)next_func) = bwdfn1;
+    *((funcptr *)next_func) = bwdfn0_a0_1;
     return 0;
   } else {
     return bwdfn1( state, next_func );
@@ -209,7 +329,7 @@ static int bwdfn0( const state_t *state, void *next_func )
 
 #define init_history 0
 
-#define max_fwd_children 4
+#define max_fwd_children 8
 
 /* NOTE: FOR ALL OF THE MOVE ITERATOR DEFINITIONS funcptr
    MUST BE A VARIABLE. */
@@ -232,8 +352,8 @@ static int bwdfn0( const state_t *state, void *next_func )
 #define next_fwd_history( history, rule_used ) (fwd_prune_table[(history)+(rule_used)])
 
 
-static const int bw_max_children = 4;
-#define max_bwd_children 4
+static const int bw_max_children = 8;
+#define max_bwd_children 8
 
 /* initialise a backwards move iterator */
 #define init_bwd_iter( ruleid_iter, state ) { \

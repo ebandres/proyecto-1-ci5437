@@ -6,8 +6,12 @@ DOMAIN tile 4
 tile tile tile tile
 
 b X - - => X b - - 
+X b - - => b X - -
 b - X - => X - b - 
-- b - X => - X - b 
+X - b - => b - X -
+- b - X => - X - b
+- X - b => - b - X
 - - b X => - - X b 
+- - X b => - - b X
 
 GOAL b 1 2 3 
