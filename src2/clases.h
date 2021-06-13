@@ -13,16 +13,12 @@ using namespace std;
 
 typedef unsigned Action;
 
-ssize_t print_state( FILE *file, const state_t *state );
-
-ssize_t read_state( const char *string, state_t *state );
-
 class State {
 	public:
 	state_t state;
 	ruleid_iterator_t iter;
 	int  ruleid;
-	char move[4];
+	string move;
 
 	bool isGoalState();
 	list<pair<State,Action>> succesors();

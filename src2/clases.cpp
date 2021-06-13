@@ -4,38 +4,6 @@
 
 using namespace std;
 
-ssize_t print_state( FILE *file, const state_t *state )
-{
-  size_t len, t; int i;
-  for( len = 0, i = 0; i < NUMVARS; ++i ) {
-    t = fprintf( file, "%s ", var_domain_names[ i ][ state->vars[ i ] ] );
-    if( t < 0 ) { return -1; }
-    len += t;
-  }
-  return len;
-}
-
-ssize_t read_state( const char *string, state_t *state )
-{
-  size_t len, t; int i; var_t j;
-  len = 0;
-  while( (string[len] !=0) && isspace(string[len]) ) { len++; } // skip leading white space
-  for( i = 0; i < NUMVARS; ++i ) {
-    for( j = 0; j < domain_sizes[ var_domains[ i ] ]; ++j ) {
-      t = strlen( var_domain_names[ i ][ j ] );
-      if( !strncasecmp( var_domain_names[ i ][ j ], &string[ len ], t ) ) {
-          if( (string[len+t] ==0) || isspace(string[len+t]) ) { // require a terminator after the match
-	      state->vars[ i ] = j;
-	      len += t;
-              while( (string[len] !=0) && isspace(string[len]) ) { len++; } // skip the following white space
-              break;
-          }
-      }
-    }
-    if( j >= domain_sizes[ var_domains[ i ] ] ) { return -1; }
-  }
-  return len;
-}
 
 typedef unsigned Action;
 
