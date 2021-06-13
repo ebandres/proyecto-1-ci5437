@@ -63,3 +63,23 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g) {
 		}
 	}
 }
+
+unsigned manhattan(state_t *state) { 
+  	char st[100];
+  	sprint_state(st, 100, state);
+  	char *token, *rest = st;
+  	int val, h = 0, index = 0;
+
+	while ((token = strtok_r(rest, " ", &rest))) {
+		if (strcmp(token, "b") == 0)  {
+			index++;
+			continue;
+		}
+
+    	val = atoi(token);
+
+    	h += abs(index / 4 - val / 4) + abs(index % 4 - val % 4);
+    	index++;
+	}
+	return h; 
+}
