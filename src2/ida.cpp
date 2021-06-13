@@ -5,7 +5,7 @@
 using namespace std;
 
 const float inf = numeric_limits<float>::infinity();
-State state;
+state_t state;
 vector<Action> path;
 
 unsigned manhattan(state_t *state) { 
@@ -31,7 +31,7 @@ unsigned manhattan(state_t *state) {
 
 pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g) {
 	// base cases
-	unsigned h = manhattan(&(state.state));
+	unsigned h = manhattan(&(state));
 	unsigned f = g + h;
 
 	if (f > bound) {
@@ -44,14 +44,29 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g) {
 
 	unsigned t = numeric_limits<unsigned>::infinity();
 
+	// Variables para generar los sucesores
+	ruleid_iterator_t iter;
+	int  ruleid, hist, child_hist;
+	Action a;
+	hist = init_history;
+
+
+	init_fwd_iter( &iter, &state);
 	// En par.first esta el estado y en par.second el ruleid de la regla que lo generó 
-	for (auto const& par : state.succesors()) {
+	while ((ruleid=next_ruleid(&iter)) >= 0) {
 
-		unsigned cost = g + get_fwd_rule_cost(par.second);
-		state = par.first;
+		a = ruleid;
+		// Poda de padres
+		if (!fwd_rule_valid_for_history(hist,ruleid)) {
+			continue;
+		}
 
-		if (manhattan(&(state.state)) < inf) {
-			path.push_back(par.second);
+		child_hist = next_fwd_history(hist,ruleid);
+		unsigned cost = g + get_fwd_rule_cost(ruleid);
+		apply_fwd_rule(ruleid,&state,&state);
+
+		if (manhattan(&(state)) < inf) {
+			path.push_back(a);
 			pair<bool,unsigned> p = f_bounded_dfs_visit(bound, cost);
 
 			if (p.first == true) {
@@ -62,13 +77,13 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g) {
 			path.pop_back();
 		}
 
-		apply_bwd_rule(par.second, &(state.state), &(state.state));
+		apply_bwd_rule(a, &state, &state);
 	}
 }
 
-void ida_search(State init) {
+void ida_search(state_t init) {
 	state = init;
-	unsigned bound = manhattan(&(init.state));
+	unsigned bound = manhattan(&state);
 	// Search with increasing f-value bounds
 	while (true) {
 
@@ -86,9 +101,7 @@ void ida_search(State init) {
 
 int main() {
 	char str[MAX_LINE_LENGTH + 1] = "1 2 3 b"; // Para la prueba se pone una representación del estado en string
-	state_t stateTest;
-	ssize_t nchars = read_state(str, &stateTest); // Esto convierte el str a un estado de psvn
-	state.state = stateTest;
+	ssize_t nchars = read_state(str, &state); // Esto convierte el str a un estado de psvn
 
-	cout << manhattan(&(state.state)) << endl;
+	cout << manhattan(&state) << endl;
 }
