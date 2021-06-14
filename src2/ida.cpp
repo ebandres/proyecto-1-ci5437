@@ -1,12 +1,16 @@
 #include <limits>
 #include <algorithm>
+#include <chrono>
 #include "clases.h"
 
 using namespace std;
+using namespace std::chrono;
+
 
 const float inf = numeric_limits<float>::infinity();
 state_t state;
 vector<Action> path;
+
 
 // Genera un sucesor del estado 
 void apply_rule(int ruleid, state_t *state) {
@@ -41,7 +45,7 @@ unsigned manhattan(state_t *state) {
 
     	val = atoi(token);
 
-    	h += abs(index / 2 - val / 2) + abs(index % 2 - val % 2);
+    	h += abs(index / 4 - val / 4) + abs(index % 4 - val % 4);
     	index++;
 	}
 	return h; 
@@ -83,8 +87,8 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g, int history)
 		cost = g + get_fwd_rule_cost(ruleid);
 
 		apply_rule(ruleid, &state);
-		print_state(stdout, &state);
-		cout << ruleid << "\n";
+		//print_state(stdout, &state);
+		//cout << "rule " << ruleid << endl;
 
 		if (manhattan(&(state)) < inf) {
 			path.push_back(a);
@@ -119,10 +123,18 @@ void ida_search() {
 }
 
 int main() {
-	char str[MAX_LINE_LENGTH + 1] = "1 3 2 b"; // Para la prueba se pone una representación del estado en string
+	char str[MAX_LINE_LENGTH + 1] = "14 13 15 7 11 12 9 5 6 b 2 1 4 8 10 3"; // Para la prueba se pone una representación del estado en string
 	ssize_t nchars = read_state(str, &state); // Esto convierte el str a un estado de psvn
 
 	cout << manhattan(&state) << endl;
 
+	print_state(stdout, &state);
+	cout << endl;
+	auto start = high_resolution_clock::now();
 	ida_search();
+	auto stop = high_resolution_clock::now();
+	auto duration = duration_cast<nanoseconds>(stop - start);
+	print_state(stdout, &state);
+
+	cout << "aa\n" << duration.count() << endl;
 }
