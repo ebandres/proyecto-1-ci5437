@@ -8,6 +8,27 @@ const float inf = numeric_limits<float>::infinity();
 state_t state;
 vector<Action> path;
 
+void apply_rule(int ruleid, state_t state) {
+	// Resulta que no podemos ejecutar:   apply_fwd_rule(ruleid, state, state)
+	// porque state se modifica mientras se lee (que implementacion tan chimba)
+	// por lo tanto, debemos usar una copia auxiliar para que no hayan errores.
+	// Este peo me amargo la vida como por 2 horas.
+	state_t state_aux;
+	copy_state(&state_aux, &state);
+	apply_fwd_rule(ruleid, &state_aux, &state);
+}
+
+/*
+  Aplica una regla backward sobre un estado y almacena el resultado en el 
+  mismo estado.
+*/
+void revert_rule(int ruleid, state_t state) {
+	state_t state_aux;
+	copy_state(&state_aux, &state);
+	apply_bwd_rule(ruleid, &state_aux, &state);
+}
+
+
 unsigned manhattan(state_t *state) { 
   	char st[100];
   	sprint_state(st, 100, state);
@@ -63,7 +84,10 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g) {
 
 		child_hist = next_fwd_history(hist,ruleid);
 		unsigned cost = g + get_fwd_rule_cost(ruleid);
-		apply_fwd_rule(ruleid,&state,&state);
+
+		apply_rule(ruleid, state);
+		print_state(stdout, &state);
+		cout << ruleid << "\n";
 
 		if (manhattan(&(state)) < inf) {
 			path.push_back(a);
@@ -77,12 +101,11 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g) {
 			path.pop_back();
 		}
 
-		apply_bwd_rule(a, &state, &state);
+		revert_rule(a, state);
 	}
 }
 
-void ida_search(state_t init) {
-	state = init;
+void ida_search() {
 	unsigned bound = manhattan(&state);
 	// Search with increasing f-value bounds
 	while (true) {
@@ -97,11 +120,11 @@ void ida_search(state_t init) {
 	}
 }
 
-
-
 int main() {
 	char str[MAX_LINE_LENGTH + 1] = "1 2 3 b"; // Para la prueba se pone una representación del estado en string
 	ssize_t nchars = read_state(str, &state); // Esto convierte el str a un estado de psvn
 
 	cout << manhattan(&state) << endl;
+
+	ida_search();
 }
