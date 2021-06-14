@@ -1,15 +1,20 @@
-#include <limits>
-#include <algorithm>
-#include <chrono>
-#include "clases.h"
+#include <vector>
+#include <set>
+#include <map>
+#include <iostream>
+#include <bits/stdc++.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include "sys/types.h"
+#include "sys/sysinfo.h"
 
 using namespace std;
-using namespace std::chrono;
 
 
-const float inf = numeric_limits<float>::infinity();
-state_t state;
-vector<Action> path;
+state_t *state;
+vector<int> path;
 
 
 // Genera un sucesor del estado 
@@ -51,50 +56,49 @@ unsigned manhattan(state_t *state) {
 	return h; 
 }
 
-pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g, int history) {
+pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning, int history) {
 	// base cases
-	unsigned h = manhattan(&state);
+	unsigned h = manhattan(state);
 	unsigned f = g + h;
 
 	if (f > bound) {
-		return make_pair(false,f);
+		return {false,f};
 	}
 
 	if (h == 0) {
-		return make_pair(true,g);
+		return {true,f};
 	}
 
-	unsigned t = numeric_limits<unsigned>::infinity();
+	unsigned t = UINT_MAX;
 
 	// Variables para generar los sucesores
 	ruleid_iterator_t iter;
 	int  ruleid, child_hist;
 	pair<bool,unsigned> p;
 	unsigned cost;
-	Action a;
 
-	init_fwd_iter( &iter, &state);
+	init_fwd_iter( &iter, state);
 	// En par.first esta el estado y en par.second el ruleid de la regla que lo generó 
 	while ((ruleid=next_ruleid(&iter)) >= 0) {
 
-		a = ruleid;
-		// Poda de padres
-		if (!fwd_rule_valid_for_history(history,ruleid)) {
-			continue;
-		}
+	    if (pruning) {
+	      if (! fwd_rule_valid_for_history(history, ruleid)) continue;
+	      child_hist = next_fwd_history(history, ruleid);
+	    } else {
+	      child_hist = 0;
+	    }
 
-		child_hist = next_fwd_history(history,ruleid);
 		cost = g + get_fwd_rule_cost(ruleid);
 
-		apply_rule(ruleid, &state);
+		apply_rule(ruleid, state);
 		//print_state(stdout, &state);
 		//cout << "rule " << ruleid << endl;
 
-		if (manhattan(&(state)) < inf) {
-			path.push_back(a);
-			p = f_bounded_dfs_visit(bound, cost, child_hist);
+		if (manhattan(state) < UINT_MAX) {
+			path.push_back(ruleid);
+			p = f_bounded_dfs_visit(bound, cost, pruning, child_hist);
 
-			if (p.first == true) {
+			if (p.first) {
 				return p;
 			}
 
@@ -102,39 +106,35 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g, int history)
 			path.pop_back();
 		}
 
-		revert_rule(a, &state);
+		revert_rule(ruleid, state);
 	}
+	return {false,t};
 }
 
-void ida_search() {
-	unsigned bound = manhattan(&state);
+vector<int> ida_search(state_t *init, bool pruning) {
+	state = init;
+	unsigned bound = manhattan(state);
+	pair<bool,unsigned> p;
 	int hist = init_history;
 	// Search with increasing f-value bounds
-	while (true) {
+	while (bound != UINT_MAX) {
 
-		pair<bool,unsigned> p = f_bounded_dfs_visit(bound, 0, hist);
+		p = f_bounded_dfs_visit(bound, 0, pruning, hist);
 
-		if (p.first == true) {
-			break;
+		if (p.first) {
+			return path;
 		}
 
 		bound = p.second;
 	}
+	path.clear();
+	return path;
 }
 
 int main() {
-	char str[MAX_LINE_LENGTH + 1] = "14 13 15 7 11 12 9 5 6 b 2 1 4 8 10 3"; // Para la prueba se pone una representación del estado en string
-	ssize_t nchars = read_state(str, &state); // Esto convierte el str a un estado de psvn
-
-	cout << manhattan(&state) << endl;
-
-	print_state(stdout, &state);
-	cout << endl;
-	auto start = high_resolution_clock::now();
-	ida_search();
-	auto stop = high_resolution_clock::now();
-	auto duration = duration_cast<nanoseconds>(stop - start);
-	print_state(stdout, &state);
-
-	cout << "aa\n" << duration.count() << endl;
+  vector<int> result;
+  state_t *init;
+  char str[100 + 1] = "14 1 9 6 4 8 12 5 7 2 3 B 10 11 13 15"; // Para la prueba se pone una representación del estado en string
+  ssize_t nchars = read_state(str, init); // Esto convierte el str a un estado de psvn
+  result = ida_search(init,true);
 }
