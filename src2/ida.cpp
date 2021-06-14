@@ -31,7 +31,7 @@ unsigned manhattan(state_t *state) {
   	sprint_state(st, 100, state);
   	char *token, *rest = st;
   	int val, index = 0;
-  	unsigned h = 0;
+  	int h = 0;
 
 	while ((token = strtok_r(rest, " ", &rest))) {
 		if (strcmp(token, "b") == 0)  {
@@ -41,7 +41,7 @@ unsigned manhattan(state_t *state) {
 
     	val = atoi(token);
 
-    	h += abs(index / 4 - val / 4) + abs(index % 4 - val % 4);
+    	h += abs(index / 2 - val / 2) + abs(index % 2 - val % 2);
     	index++;
 	}
 	return h; 
