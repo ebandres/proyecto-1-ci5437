@@ -2,6 +2,7 @@
 #include <set>
 #include <map>
 #include <iostream>
+#include <chrono>
 #include <bits/stdc++.h>
 #include <signal.h>
 #include <stdlib.h>
@@ -11,6 +12,7 @@
 #include "sys/sysinfo.h"
 
 using namespace std;
+using namespace std::chrono;
 
 
 state_t *state;
@@ -91,7 +93,7 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning,
 		cost = g + get_fwd_rule_cost(ruleid);
 
 		apply_rule(ruleid, state);
-		//print_state(stdout, &state);
+		//print_state(stdout, state);
 		//cout << "rule " << ruleid << endl;
 
 		if (manhattan(state) < UINT_MAX) {
@@ -136,5 +138,12 @@ int main() {
   state_t *init;
   char str[100 + 1] = "14 1 9 6 4 8 12 5 7 2 3 B 10 11 13 15"; // Para la prueba se pone una representación del estado en string
   ssize_t nchars = read_state(str, init); // Esto convierte el str a un estado de psvn
+
+  auto start = high_resolution_clock::now();
+
   result = ida_search(init,true);
+
+  auto stop = high_resolution_clock::now();
+  auto duration = duration_cast<milliseconds>(stop - start);
+  cout << duration.count() << endl;
 }
