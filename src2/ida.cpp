@@ -16,6 +16,7 @@ using namespace std::chrono;
 
 
 state_t *state;
+unsigned mtable[16][16];
 vector<int> path;
 
 
@@ -58,9 +59,43 @@ unsigned manhattan(state_t *state) {
 	return h; 
 }
 
+void setManhattan(){
+	unsigned prov[16][16]={{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+						   {1,0,1,2,2,1,2,3,3,2,3,4,4,3,4,5},
+						   {2,1,0,1,3,2,1,2,4,3,2,3,5,4,3,4},
+						   {3,2,1,0,4,3,2,1,5,4,3,2,6,5,4,3},
+						   {1,2,3,4,0,1,2,3,1,2,3,4,2,3,4,5},
+						   {2,1,2,3,1,0,1,2,2,1,2,3,3,2,3,4},
+						   {3,2,1,2,2,1,0,1,3,2,1,2,4,3,2,3},
+						   {4,3,2,1,3,2,1,0,4,3,2,1,5,4,3,2},
+						   {2,3,4,5,1,2,3,4,0,1,2,3,1,2,3,4},
+						   {3,2,3,4,2,1,2,3,1,0,1,2,2,1,2,3},
+						   {4,3,2,3,3,2,1,2,2,1,0,1,3,2,1,2},
+						   {5,4,3,2,4,3,2,1,3,2,1,0,4,3,2,1},
+						   {3,4,5,6,2,3,4,5,1,2,3,4,0,1,2,3},
+						   {4,3,4,5,3,2,3,4,2,1,2,3,1,0,1,2},
+						   {5,4,3,4,4,3,2,3,3,2,1,2,2,1,0,1},
+						   {6,5,4,3,5,4,3,2,4,3,2,1,3,2,1,0}};
+
+	for (int i=0; i<16; i++) {
+		for (int j=0; j<16; j++) {
+			mtable[i][j] = prov[i][j];
+		}
+	}
+}
+
+unsigned manhattan2(state_t puzzle_state){
+   unsigned h=0;
+   for (int i=0; i<=15; i++){
+      h += mtable[puzzle_state.vars[i]][i];
+   }
+   return h;
+}
+
 pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning, int history) {
 	// base cases
-	unsigned h = manhattan(state);
+	//unsigned h = manhattan(state);
+	unsigned h = manhattan2(*state);
 	unsigned f = g + h;
 
 	if (f > bound) {
@@ -96,7 +131,8 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning,
 		//print_state(stdout, state);
 		//cout << "rule " << ruleid << endl;
 
-		if (manhattan(state) < UINT_MAX) {
+		//if (manhattan(state) < UINT_MAX) {
+		if (manhattan2(*state) < UINT_MAX) {
 			path.push_back(ruleid);
 			p = f_bounded_dfs_visit(bound, cost, pruning, child_hist);
 
@@ -115,7 +151,8 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning,
 
 vector<int> ida_search(state_t *init, bool pruning) {
 	state = init;
-	unsigned bound = manhattan(state);
+	//unsigned bound = manhattan(state);
+	unsigned bound = manhattan2(*state);
 	pair<bool,unsigned> p;
 	int hist = init_history;
 	// Search with increasing f-value bounds
@@ -138,6 +175,7 @@ int main() {
   state_t *init;
   char str[100 + 1] = "14 1 9 6 4 8 12 5 7 2 3 B 10 11 13 15"; // Para la prueba se pone una representación del estado en string
   ssize_t nchars = read_state(str, init); // Esto convierte el str a un estado de psvn
+  setManhattan();
 
   auto start = high_resolution_clock::now();
 
@@ -145,5 +183,5 @@ int main() {
 
   auto stop = high_resolution_clock::now();
   auto duration = duration_cast<milliseconds>(stop - start);
-  cout << duration.count() << endl;
+  cout << "time: " << duration.count() << endl;
 }
