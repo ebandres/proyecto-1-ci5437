@@ -182,6 +182,6 @@ int main() {
   result = ida_search(init,true);
 
   auto stop = high_resolution_clock::now();
-  auto duration = duration_cast<milliseconds>(stop - start);
-  cout << "time: " << duration.count() << endl;
+  duration<double> total = stop - start;
+  cout << "time: " << total.count() << " segundos" << endl;
 }
