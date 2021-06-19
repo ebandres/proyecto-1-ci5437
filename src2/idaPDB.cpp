@@ -84,10 +84,10 @@ void setManhattan(){
 	}
 }
 
-unsigned manhattan2(state_t puzzle_state){
+unsigned manhattan2(state_t state){
    unsigned h=0;
    for (int i=0; i<=15; i++){
-      h += mtable[puzzle_state.vars[i]][i];
+      h += mtable[state.vars[i]][i];
    }
    return h;
 }
@@ -119,10 +119,10 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning,
 	while ((ruleid=next_ruleid(&iter)) >= 0) {
 
 	    if (pruning) {
-	      if (! fwd_rule_valid_for_history(history, ruleid)) continue;
-	      child_hist = next_fwd_history(history, ruleid);
+	    	if (! fwd_rule_valid_for_history(history, ruleid)) continue;
+	    	child_hist = next_fwd_history(history, ruleid);
 	    } else {
-	      child_hist = 0;
+	    	child_hist = 0;
 	    }
 
 		cost = g + get_fwd_rule_cost(ruleid);
@@ -171,19 +171,19 @@ vector<int> ida_search(state_t *init, bool pruning) {
 }
 
 int main() {
-  vector<int> result;
-  state_t *init;
-  char str[100 + 1] = "14 1 9 6 4 8 12 5 7 2 3 B 10 11 13 15"; // Para la prueba se pone una representación del estado en string
-  //char str[100 + 1] = "B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"; 
-  ssize_t nchars = read_state(str, init); // Esto convierte el str a un estado de psvn
-  //setManhattan();
-  establishHeuristic();
-  auto start = high_resolution_clock::now();
+	vector<int> result;
+	state_t *init;
+	char str[100 + 1] = "14 1 9 6 4 8 12 5 7 2 3 B 10 11 13 15"; // Para la prueba se pone una representación del estado en string
+	//char str[100 + 1] = "B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"; 
+	ssize_t nchars = read_state(str, init); // Esto convierte el str a un estado de psvn
+	//setManhattan();
+	establishHeuristic();
+	auto start = high_resolution_clock::now();
 
-  result = ida_search(init,true);
-  //unsigned test = heuristic(*init);
-  //cout << "HEURISTIC VALUE: " << test << endl;
-  auto stop = high_resolution_clock::now();
-  duration<double> total = stop - start;
-  cout << "time: " << total.count() << " segundos" << endl;
+	result = ida_search(init,true);
+	//unsigned test = heuristic(*init);
+	//cout << "HEURISTIC VALUE: " << test << endl;
+	auto stop = high_resolution_clock::now();
+	duration<double> total = stop - start;
+	cout << "time: " << total.count() << " segundos" << endl;
 }

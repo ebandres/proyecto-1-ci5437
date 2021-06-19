@@ -84,10 +84,10 @@ void setManhattan(){
 	}
 }
 
-unsigned manhattan2(state_t puzzle_state){
+unsigned manhattan2(state_t state){
    unsigned h=0;
    for (int i=0; i<=15; i++){
-      h += mtable[puzzle_state.vars[i]][i];
+      h += mtable[state.vars[i]][i];
    }
    return h;
 }
