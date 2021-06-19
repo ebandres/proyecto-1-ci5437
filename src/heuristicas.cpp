@@ -15,7 +15,10 @@ state_t abst_state1;
 state_t abst_state2;
 state_t abst_state3;
 
-void establishHeuristic(){
+// Variable para almacenar manhattan
+unsigned mtable[16][16];
+
+void set_pdb(){
 	FILE *f1 = fopen("15-puzzle_1-2-3-6-7.pdb","r");
 	FILE *f2 = fopen("15-puzzle_4-5-8-9-12.pdb","r");
 	FILE *f3 = fopen("15-puzzle_10-11-13-14-15.pdb","r");
@@ -33,7 +36,7 @@ void establishHeuristic(){
 	fclose(f3);	
 }
 
-unsigned heuristic(state_t s){
+unsigned pdb_add(state_t s){
 	abstract_state(abs1, &s, &abst_state1);
 	abstract_state(abs2, &s, &abst_state2);
 	abstract_state(abs3, &s, &abst_state3);
@@ -42,4 +45,37 @@ unsigned heuristic(state_t s){
 	//unsigned sum = max({*state_map_get(pdb1, &abst_state1), *state_map_get(pdb2, &abst_state2), *state_map_get(pdb3, &abst_state3)});
 
 	return sum;
+}
+
+void set_manhattan(){
+	unsigned prov[16][16]={{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+						   {1,0,1,2,2,1,2,3,3,2,3,4,4,3,4,5},
+						   {2,1,0,1,3,2,1,2,4,3,2,3,5,4,3,4},
+						   {3,2,1,0,4,3,2,1,5,4,3,2,6,5,4,3},
+						   {1,2,3,4,0,1,2,3,1,2,3,4,2,3,4,5},
+						   {2,1,2,3,1,0,1,2,2,1,2,3,3,2,3,4},
+						   {3,2,1,2,2,1,0,1,3,2,1,2,4,3,2,3},
+						   {4,3,2,1,3,2,1,0,4,3,2,1,5,4,3,2},
+						   {2,3,4,5,1,2,3,4,0,1,2,3,1,2,3,4},
+						   {3,2,3,4,2,1,2,3,1,0,1,2,2,1,2,3},
+						   {4,3,2,3,3,2,1,2,2,1,0,1,3,2,1,2},
+						   {5,4,3,2,4,3,2,1,3,2,1,0,4,3,2,1},
+						   {3,4,5,6,2,3,4,5,1,2,3,4,0,1,2,3},
+						   {4,3,4,5,3,2,3,4,2,1,2,3,1,0,1,2},
+						   {5,4,3,4,4,3,2,3,3,2,1,2,2,1,0,1},
+						   {6,5,4,3,5,4,3,2,4,3,2,1,3,2,1,0}};
+
+	for (int i=0; i<16; i++) {
+		for (int j=0; j<16; j++) {
+			mtable[i][j] = prov[i][j];
+		}
+	}
+}
+
+unsigned manhattan(state_t state){
+   unsigned h=0;
+   for (int i=0; i<=15; i++){
+      h += mtable[state.vars[i]][i];
+   }
+   return h;
 }

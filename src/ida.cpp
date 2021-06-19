@@ -16,8 +16,8 @@ using namespace std::chrono;
 
 
 state_t *state;
-unsigned mtable[16][16];
 vector<int> path;
+unsigned (*heuristic) (state_t);
 
 
 // Genera un sucesor del estado 
@@ -37,65 +37,9 @@ void revert_rule(int ruleid, state_t *state) {
 	apply_bwd_rule(ruleid, &state_aux, state);
 }
 
-
-unsigned manhattan(state_t *state) { 
-  	char st[100];
-  	sprint_state(st, 100, state);
-  	char *token, *rest = st;
-  	int val, index = 0;
-  	int h = 0;
-
-	while ((token = strtok_r(rest, " ", &rest))) {
-		if (strcmp(token, "b") == 0)  {
-			index++;
-			continue;
-		}
-
-    	val = atoi(token);
-
-    	h += abs(index / 4 - val / 4) + abs(index % 4 - val % 4);
-    	index++;
-	}
-	return h; 
-}
-
-void setManhattan(){
-	unsigned prov[16][16]={{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-						   {1,0,1,2,2,1,2,3,3,2,3,4,4,3,4,5},
-						   {2,1,0,1,3,2,1,2,4,3,2,3,5,4,3,4},
-						   {3,2,1,0,4,3,2,1,5,4,3,2,6,5,4,3},
-						   {1,2,3,4,0,1,2,3,1,2,3,4,2,3,4,5},
-						   {2,1,2,3,1,0,1,2,2,1,2,3,3,2,3,4},
-						   {3,2,1,2,2,1,0,1,3,2,1,2,4,3,2,3},
-						   {4,3,2,1,3,2,1,0,4,3,2,1,5,4,3,2},
-						   {2,3,4,5,1,2,3,4,0,1,2,3,1,2,3,4},
-						   {3,2,3,4,2,1,2,3,1,0,1,2,2,1,2,3},
-						   {4,3,2,3,3,2,1,2,2,1,0,1,3,2,1,2},
-						   {5,4,3,2,4,3,2,1,3,2,1,0,4,3,2,1},
-						   {3,4,5,6,2,3,4,5,1,2,3,4,0,1,2,3},
-						   {4,3,4,5,3,2,3,4,2,1,2,3,1,0,1,2},
-						   {5,4,3,4,4,3,2,3,3,2,1,2,2,1,0,1},
-						   {6,5,4,3,5,4,3,2,4,3,2,1,3,2,1,0}};
-
-	for (int i=0; i<16; i++) {
-		for (int j=0; j<16; j++) {
-			mtable[i][j] = prov[i][j];
-		}
-	}
-}
-
-unsigned manhattan2(state_t state){
-   unsigned h=0;
-   for (int i=0; i<=15; i++){
-      h += mtable[state.vars[i]][i];
-   }
-   return h;
-}
-
 pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning, int history) {
 	// base cases
-	//unsigned h = manhattan(state);
-	unsigned h = manhattan2(*state);
+	unsigned h = heuristic(*state);
 	unsigned f = g + h;
 
 	if (f > bound) {
@@ -119,10 +63,10 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning,
 	while ((ruleid=next_ruleid(&iter)) >= 0) {
 
 	    if (pruning) {
-	      if (! fwd_rule_valid_for_history(history, ruleid)) continue;
-	      child_hist = next_fwd_history(history, ruleid);
+	    	if (! fwd_rule_valid_for_history(history, ruleid)) continue;
+	    	child_hist = next_fwd_history(history, ruleid);
 	    } else {
-	      child_hist = 0;
+	    	child_hist = 0;
 	    }
 
 		cost = g + get_fwd_rule_cost(ruleid);
@@ -131,8 +75,7 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning,
 		//print_state(stdout, state);
 		//cout << "rule " << ruleid << endl;
 
-		//if (manhattan(state) < UINT_MAX) {
-		if (manhattan2(*state) < UINT_MAX) {
+		if (heuristic(*state) < UINT_MAX) {
 			path.push_back(ruleid);
 			p = f_bounded_dfs_visit(bound, cost, pruning, child_hist);
 
@@ -151,8 +94,7 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning,
 
 vector<int> ida_search(state_t *init, bool pruning) {
 	state = init;
-	//unsigned bound = manhattan(state);
-	unsigned bound = manhattan2(*state);
+	unsigned bound = heuristic(*state);
 	pair<bool,unsigned> p;
 	int hist = init_history;
 	// Search with increasing f-value bounds
@@ -170,18 +112,43 @@ vector<int> ida_search(state_t *init, bool pruning) {
 	return path;
 }
 
+
 int main() {
-  vector<int> result;
-  state_t *init;
-  char str[100 + 1] = "14 1 9 6 4 8 12 5 7 2 3 B 10 11 13 15"; // Para la prueba se pone una representación del estado en string
-  ssize_t nchars = read_state(str, init); // Esto convierte el str a un estado de psvn
-  setManhattan();
 
-  auto start = high_resolution_clock::now();
+	vector<int> result;
+	state_t *init;
+	char str[100 + 1] = "14 1 9 6 4 8 12 5 7 2 3 B 10 11 13 15"; // Para la prueba se pone una representación del estado en string
+	//char str[100 + 1] = "B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"; 
+	ssize_t nchars = read_state(str, init); // Esto convierte el str a un estado de psvn
 
-  result = ida_search(init,true);
+	cout << "Input option:\n\t1 Manhattan\n\t2 PDB" << endl;
+	if (fgets(str, sizeof(str), stdin) == NULL) {
+		cout << "No input.\n";
+		return 1; 
+	}
 
-  auto stop = high_resolution_clock::now();
-  duration<double> total = stop - start;
-  cout << "time: " << total.count() << " segundos" << endl;
+	int selection = atoi(str);
+
+	switch (selection)
+	{
+	case 1:
+		cout << "man" << endl;
+		set_manhattan();
+		heuristic = manhattan;
+		break;
+	case 2:
+		cout << "pdb" << endl;
+		set_pdb();
+		heuristic = pdb_add;
+		break;
+	}
+
+	auto start = high_resolution_clock::now();
+
+	result = ida_search(init,true);
+	//unsigned test = heuristic(*init);
+	//cout << "HEURISTIC VALUE: " << test << endl;
+	auto stop = high_resolution_clock::now();
+	duration<double> total = stop - start;
+	cout << "time: " << total.count() << " segundos" << endl;
 }

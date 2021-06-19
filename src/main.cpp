@@ -1,26 +1,58 @@
-#include "clases.h"
+#include <vector>
+#include <set>
+#include <map>
+#include <iostream>
+#include <chrono>
+#include <bits/stdc++.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include "sys/types.h"
+#include "sys/sysinfo.h"
 
 using namespace std;
+using namespace std::chrono;
+
+
+unsigned (*heuristic) (state_t);
 
 int main() {
 
-	char str[MAX_LINE_LENGTH + 1] = "1 b 2 3"; // Para la prueba se pone una representación del estado en string
-	state_t state;
-	list<pair<State,Action>> listaPar;
-	ssize_t nchars = read_state(str, &state); // Esto convierte el str a un estado de psvn
-	State initSt;
-	initSt.state = state;
-	cout << initSt.isGoalState() << endl;
-	listaPar = initSt.succesors();
-	Node start = make_root_node(initSt);
-	Node* startPtr = &start;
-	//print_state(stdout,&(start.state.state));
+	vector<int> result;
+	state_t *init;
+	char str[100 + 1] = "14 1 9 6 4 8 12 5 7 2 3 B 10 11 13 15"; // Para la prueba se pone una representación del estado en string
+	//char str[100 + 1] = "B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"; 
+	ssize_t nchars = read_state(str, init); // Esto convierte el str a un estado de psvn
 
-	for (auto const& i : listaPar) {
-     	//print_state(stdout, &(i.first.state));
-     	Node* newNode = start.make_node(i.first,startPtr,i.second);
-     	print_state(stdout,&(newNode->state.state));
-     	printf("\n");
-     	cout << newNode->g << endl;
+	cout << "Input option:\n\t1 Manhattan\n\t2 PDB" << endl;
+	if (fgets(str, sizeof(str), stdin) == NULL) {
+		cout << "No input.\n";
+		return 1; 
 	}
+
+	int selection = atoi(str);
+
+	switch (selection)
+	{
+	case 1:
+		cout << "man" << endl;
+		set_manhattan();
+		heuristic = manhattan;
+		break;
+	case 2:
+		cout << "pdb" << endl;
+		set_pdb();
+		heuristic = pdb_add;
+		break;
+	}
+
+	auto start = high_resolution_clock::now();
+
+	result = ida_search(init,true);
+	//unsigned test = heuristic(*init);
+	//cout << "HEURISTIC VALUE: " << test << endl;
+	auto stop = high_resolution_clock::now();
+	duration<double> total = stop - start;
+	cout << "time: " << total.count() << " segundos" << endl;
 }
