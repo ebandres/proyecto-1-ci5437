@@ -1,4 +1,7 @@
 #include <iostream>
+#include <algorithm>
+
+using namespace std;
 
 // Variables para guardar las pdb's
 state_map_t *pdb1, *pdb2, *pdb3;
@@ -36,6 +39,7 @@ unsigned heuristic(state_t s){
 	abstract_state(abs3, &s, &abst_state3);
 
 	unsigned sum = *state_map_get(pdb1, &abst_state1) + *state_map_get(pdb2, &abst_state2) + *state_map_get(pdb3, &abst_state3);
+	//unsigned sum = max({*state_map_get(pdb1, &abst_state1), *state_map_get(pdb2, &abst_state2), *state_map_get(pdb3, &abst_state3)});
 
 	return sum;
 }
