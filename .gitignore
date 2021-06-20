@@ -2,3 +2,5 @@
 src2/xsnombre.exe
 *.pdb
 src2/loquesea.exe
+*.exe
+*.o
