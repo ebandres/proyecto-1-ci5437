@@ -18,17 +18,29 @@ using namespace std::chrono;
 
 unsigned (*heuristic) (state_t);
 
-int main() {
+int main(void) {
 
 	vector<int> result;
 	state_t *init;
 	char str[100 + 1] = "14 1 9 6 4 8 12 5 7 2 3 B 10 11 13 15"; // Para la prueba se pone una representación del estado en string
-	//char str[100 + 1] = "B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"; 
-	ssize_t nchars = read_state(str, init); // Esto convierte el str a un estado de psvn
+	ssize_t nchars;
+
+	cout << "Input initial state:\n";
+	if (fgets(str, sizeof(str), stdin) == NULL) {
+		cout << "No input" << endl;
+		return 1; 
+	}
+
+	// Convert the string to a state
+	nchars = read_state(str, init);
+	if (nchars <= 0) {
+		cout << "Invalid state" << endl;
+		return 2; 
+	}
 
 	cout << "Input option:\n\t1 Manhattan\n\t2 PDB" << endl;
 	if (fgets(str, sizeof(str), stdin) == NULL) {
-		cout << "No input.\n";
+		cout << "No input" << endl;
 		return 1; 
 	}
 
@@ -37,23 +49,23 @@ int main() {
 	switch (selection)
 	{
 	case 1:
-		cout << "man" << endl;
 		set_manhattan();
 		heuristic = manhattan;
 		break;
 	case 2:
-		cout << "pdb" << endl;
 		set_pdb();
 		heuristic = pdb_add;
 		break;
 	}
 
+	int64_t nums = 1;
+	int64_t* generatedNodes = &nums;
 	auto start = high_resolution_clock::now();
 
-	result = ida_search(init,heuristic,true);
-	//unsigned test = heuristic(*init);
-	//cout << "HEURISTIC VALUE: " << test << endl;
+	result = ida_search(init,heuristic,true, generatedNodes);
+
 	auto stop = high_resolution_clock::now();
 	duration<double> total = stop - start;
-	cout << "time: " << total.count() << " segundos" << endl;
+	cout << "time: " << total.count() << " s\t" << "solution length: " << result.size() << endl;
+	cout << nums << endl;
 }

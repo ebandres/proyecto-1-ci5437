@@ -10,6 +10,7 @@ main.o: ida.o
 
 main: main.o
 	$(CC) -o main main.o ida.o
+	rm -f *.o
 
 abstractor:
 	@echo "**** Constructing abstractor ..."
@@ -18,3 +19,6 @@ abstractor:
 %.distSummary: %.c
 	@echo "**** Constructing $@ ..."
 	@$(CC) $(OPT) distSummary.cpp -include $< -o $@
+
+clean:
+	rm -f *.o
