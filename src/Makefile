@@ -10,3 +10,11 @@ main.o: ida.o
 
 main: main.o
 	$(CC) -o main main.o ida.o
+
+abstractor:
+	@echo "**** Constructing abstractor ..."
+	@$(CC) $(OPT) abstractor.cpp psvn.cpp -o $@
+
+%.distSummary: %.c
+	@echo "**** Constructing $@ ..."
+	@$(CC) $(OPT) distSummary.cpp -include $< -o $@
