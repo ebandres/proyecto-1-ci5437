@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include "sys/types.h"
 #include "sys/sysinfo.h"
+#include "ida.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -49,7 +50,7 @@ int main() {
 
 	auto start = high_resolution_clock::now();
 
-	result = ida_search(init,true);
+	result = ida_search(init,heuristic,true);
 	//unsigned test = heuristic(*init);
 	//cout << "HEURISTIC VALUE: " << test << endl;
 	auto stop = high_resolution_clock::now();

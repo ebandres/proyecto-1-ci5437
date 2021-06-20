@@ -1,15 +1,16 @@
-#include <vector>
-#include <set>
-#include <map>
-#include <iostream>
-#include <chrono>
-#include <bits/stdc++.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include "sys/types.h"
-#include "sys/sysinfo.h"
+#include "ida.h"
+// #include <vector>
+// #include <set>
+// #include <map>
+// #include <iostream>
+// #include <chrono>
+// #include <bits/stdc++.h>
+// #include <signal.h>
+// #include <stdlib.h>
+// #include <stdio.h>
+// #include <unistd.h>
+// #include "sys/types.h"
+// #include "sys/sysinfo.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -17,7 +18,7 @@ using namespace std::chrono;
 
 state_t *state;
 vector<int> path;
-unsigned (*heuristic) (state_t);
+//unsigned (*heuristic) (state_t);
 
 
 // Genera un sucesor del estado 
@@ -37,7 +38,7 @@ void revert_rule(int ruleid, state_t *state) {
 	apply_bwd_rule(ruleid, &state_aux, state);
 }
 
-pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning, int history) {
+pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*heuristic) (state_t),bool pruning, int history) {
 	// base cases
 	unsigned h = heuristic(*state);
 	unsigned f = g + h;
@@ -77,7 +78,7 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning,
 
 		if (heuristic(*state) < UINT_MAX) {
 			path.push_back(ruleid);
-			p = f_bounded_dfs_visit(bound, cost, pruning, child_hist);
+			p = f_bounded_dfs_visit(bound, cost, heuristic, pruning, child_hist);
 
 			if (p.first) {
 				return p;
@@ -92,7 +93,7 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,bool pruning,
 	return {false,t};
 }
 
-vector<int> ida_search(state_t *init, bool pruning) {
+vector<int> ida_search(state_t *init,unsigned (*heuristic) (state_t), bool pruning) {
 	state = init;
 	unsigned bound = heuristic(*state);
 	pair<bool,unsigned> p;
@@ -100,7 +101,7 @@ vector<int> ida_search(state_t *init, bool pruning) {
 	// Search with increasing f-value bounds
 	while (bound != UINT_MAX) {
 
-		p = f_bounded_dfs_visit(bound, 0, pruning, hist);
+		p = f_bounded_dfs_visit(bound, 0,heuristic, pruning, hist);
 
 		if (p.first) {
 			return path;
@@ -113,7 +114,7 @@ vector<int> ida_search(state_t *init, bool pruning) {
 }
 
 
-int main() {
+/*int main() {
 
 	vector<int> result;
 	state_t *init;
@@ -152,3 +153,4 @@ int main() {
 	duration<double> total = stop - start;
 	cout << "time: " << total.count() << " segundos" << endl;
 }
+*/
