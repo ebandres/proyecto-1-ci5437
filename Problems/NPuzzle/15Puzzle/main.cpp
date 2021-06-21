@@ -53,6 +53,8 @@ int main(void) {
 
 	if (myFile.is_open()) 
 	{
+		ofstream resultFile ("results.txt", ios::out | ios::trunc);
+
 		while ( getline(myFile, line) )
     	{
 			strcpy(str, line.c_str());
@@ -64,6 +66,9 @@ int main(void) {
 			cout << "\nstate:" << endl;
 			print_state(stdout, init);
 			cout << endl;
+
+			resultFile << "\nstate:\n" << str << endl;
+
 			int64_t generatedNodes = 1;
 
 			auto start = high_resolution_clock::now();
@@ -77,10 +82,12 @@ int main(void) {
 				if (e == 3)
 				{
 					cout << "Time limit reached" << endl;
+					resultFile << "Time limit reached" << endl;
 				}
 				else
 				{
 					cout << "Error code " << e << endl;
+					resultFile << "Error code " << e << endl;
 				}
 				result.clear();
 				
@@ -91,9 +98,12 @@ int main(void) {
 
 			duration<double> total = stop - start;
 			cout << "time: " << total.count() << " s\t" << "solution length: " << result.size() << endl;
+			resultFile << "time: " << total.count() << " s\t" << "solution length: " << result.size() << endl;
 			cout << "generated nodes: " << generatedNodes << endl;
+			resultFile << "generated nodes: " << generatedNodes << endl;
     	}
-    	myFile.close();
+    	resultFile.close();
+		myFile.close();
 	}
 
 
