@@ -58,7 +58,6 @@ int main(void) {
 		break;
 	}
 
-	int64_t nums = 1;
 	int64_t generatedNodes = 1;
 	auto start = high_resolution_clock::now();
 
