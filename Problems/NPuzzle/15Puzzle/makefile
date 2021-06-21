@@ -57,7 +57,7 @@ abstractor:
 
 main: ida.o main.o
 	$(CXX) -o main ida.o main.o
-	rm -f ida.o main.o
+	rm -f ida.o main.o ida.h ida.cpp
 
 ida.o: ida.cpp 15puzzle.c
 	$(CXX) -c ida.cpp -include 15puzzle.c
