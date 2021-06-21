@@ -6,6 +6,8 @@ using namespace std::chrono;
 
 state_t *state;
 vector<int> path;
+time_point<high_resolution_clock> start_time;
+double time_limit = 900;
 //unsigned (*heuristic) (state_t);
 
 
@@ -27,6 +29,15 @@ void revert_rule(int ruleid, state_t *state) {
 }
 
 pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*heuristic) (state_t),bool pruning, int history, int64_t &generatedNodes) {
+	// Check time limit
+	auto curr_time = high_resolution_clock::now();
+	duration<double> elapsed = curr_time - start_time;
+	if (elapsed.count() > time_limit)
+	{
+		throw 3;
+	}
+	
+	
 	// base cases
 	unsigned h = heuristic(*state);
 	unsigned f = g + h;
@@ -82,7 +93,9 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*he
 	return {false,t};
 }
 
-vector<int> ida_search(state_t *init,unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes) {
+vector<int> ida_search(state_t *init,unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes, time_point<high_resolution_clock> st) {
+	path.clear();
+	start_time = st;
 	generatedNodes = 1;
 	state = init;
 	unsigned bound = heuristic(*state);
