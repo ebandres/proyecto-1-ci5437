@@ -21,8 +21,8 @@ unsigned (*heuristic) (state_t);
 int main(void) {
 
 	vector<int> result;
-	state_t *init;
-	char str[150 + 1] = "0 1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0"; // Para la prueba se pone una representación del estado en string
+	state_t *init = new state_t;
+	char str[300 + 1]; // Para la prueba se pone una representación del estado en string
 	ssize_t nchars;
 
 	cout << "Input initial state:\n";
@@ -30,9 +30,10 @@ int main(void) {
 		cout << "No input" << endl;
 		return 1; 
 	}
-
+	cout << "Helpe" << endl;
 	// Convert the string to a state
 	nchars = read_state(str, init);
+	print_state(stdout, init);
 	if (nchars <= 0) {
 		cout << "Invalid state" << endl;
 		return 2; 

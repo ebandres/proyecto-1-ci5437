@@ -1,16 +1,4 @@
 #include "ida.h"
-// #include <vector>
-// #include <set>
-// #include <map>
-// #include <iostream>
-// #include <chrono>
-// #include <bits/stdc++.h>
-// #include <signal.h>
-// #include <stdlib.h>
-// #include <stdio.h>
-// #include <unistd.h>
-// #include "sys/types.h"
-// #include "sys/sysinfo.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -38,7 +26,7 @@ void revert_rule(int ruleid, state_t *state) {
 	apply_bwd_rule(ruleid, &state_aux, state);
 }
 
-pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*heuristic) (state_t),bool pruning, int history) {
+pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*heuristic) (state_t),bool pruning, int history, int64_t &generatedNodes) {
 	// base cases
 	unsigned h = heuristic(*state);
 	unsigned f = g + h;
@@ -59,6 +47,8 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*he
 	pair<bool,unsigned> p;
 	unsigned cost;
 
+	generatedNodes += 1;
+
 	init_fwd_iter( &iter, state);
 	// En par.first esta el estado y en par.second el ruleid de la regla que lo generó 
 	while ((ruleid=next_ruleid(&iter)) >= 0) {
@@ -74,11 +64,10 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*he
 
 		apply_rule(ruleid, state);
 		//print_state(stdout, state);
-		//cout << "rule " << ruleid << endl;
 
 		if (heuristic(*state) < UINT_MAX) {
 			path.push_back(ruleid);
-			p = f_bounded_dfs_visit(bound, cost, heuristic, pruning, child_hist);
+			p = f_bounded_dfs_visit(bound, cost, heuristic, pruning, child_hist, generatedNodes);
 
 			if (p.first) {
 				return p;
@@ -93,7 +82,8 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*he
 	return {false,t};
 }
 
-vector<int> ida_search(state_t *init,unsigned (*heuristic) (state_t), bool pruning) {
+vector<int> ida_search(state_t *init,unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes) {
+	generatedNodes = 1;
 	state = init;
 	unsigned bound = heuristic(*state);
 	pair<bool,unsigned> p;
@@ -101,7 +91,7 @@ vector<int> ida_search(state_t *init,unsigned (*heuristic) (state_t), bool pruni
 	// Search with increasing f-value bounds
 	while (bound != UINT_MAX) {
 
-		p = f_bounded_dfs_visit(bound, 0,heuristic, pruning, hist);
+		p = f_bounded_dfs_visit(bound, 0,heuristic, pruning, hist, generatedNodes);
 
 		if (p.first) {
 			return path;

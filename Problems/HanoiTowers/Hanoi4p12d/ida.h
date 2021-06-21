@@ -20,6 +20,6 @@ using namespace std::chrono;
 
 void apply_rule(int ruleid, state_t *state);
 void revert_rule(int ruleid, state_t *state);
-pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*heuristic) (state_t),bool pruning, int history);
-vector<int> ida_search(state_t *init, unsigned (*heuristic) (state_t), bool pruning);
+pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*heuristic) (state_t),bool pruning, int history, int64_t &generatedNodes);
+vector<int> ida_search(state_t *init, unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes);
 
