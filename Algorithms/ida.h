@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include "sys/types.h"
 #include "sys/sysinfo.h"
+#include "priority_queue.hpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -26,4 +27,4 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*he
 
 vector<int> ida_search(state_t *init, unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes, time_point<high_resolution_clock> st);
 
-vector<int> a_search(state_t *init, unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes, time_point<high_resolution_clock> st);
+int a_search(state_t *init, unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes, time_point<high_resolution_clock> st);

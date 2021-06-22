@@ -1,6 +1,4 @@
 #include "ida.h"
-#include "priority_queue.hpp"
-#include "clases.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -120,8 +118,62 @@ vector<int> ida_search(state_t *init,unsigned (*heuristic) (state_t), bool pruni
 
 ///////////// A STAR
 
-vector<int> a_search(state_t *init, unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes, time_point<high_resolution_clock> st) {
-	cout << "\naaaaa" << endl;
+int a_search(state_t *init, unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes, time_point<high_resolution_clock> st) {
+	path.clear();
+	start_time = st;
+	generatedNodes = 1;
+
+	time_point<high_resolution_clock> curr_time;
+	
+	PriorityQueue<state_t> q;
+	state_t curr_state;
+	state_t child_state;
+	int curr_g;
+    int *prev_g;
+    int child_h;
+    int child_g;
+    int ruleid;
+    ruleid_iterator_t iter;
+	state_map_t *costs = new_state_map();
+
+	state_map_add(costs, init, 0);
+	q.Add(0, 0, *init);
+
+	while (!q.Empty()) {
+		curr_state = q.Top();
+		curr_g = q.CurrentPriority();
+		q.Pop();
+
+		curr_time = high_resolution_clock::now();
+		duration<double> elapsed = curr_time - start_time;
+		if (elapsed.count() > time_limit)
+		{
+			throw 3;
+		}
+
+		prev_g = state_map_get(costs, &curr_state);
+
+		if (prev_g == NULL || !compare_states(&curr_state, init) || curr_g < *prev_g) {
+			state_map_add(costs, &curr_state, curr_g);
+			if (is_goal(&curr_state)) {
+				return curr_g;
+			}
+
+			generatedNodes++;
+
+			init_fwd_iter(&iter, &curr_state);
+			while ((ruleid = next_ruleid(&iter)) >= 0) {
+				apply_fwd_rule(ruleid, &curr_state, &child_state);
+				child_h = heuristic(child_state);
+
+				if (child_h < INT_MAX) {
+					child_g = curr_g + get_fwd_rule_cost(ruleid);
+					q.Add(child_g + child_h, child_g, child_state);
+				}
+			}
+		}
+	}
+	return -1;
 }
 
 /*int main() {

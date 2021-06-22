@@ -42,6 +42,7 @@ int main(void) {
 	signal(SIGINT, signal_callback_handler);
 
 	vector<int> result;
+	int result_a;
 	state_t *init = new state_t;
 	char str[300 + 1]; // Para la prueba se pone una representación del estado en string
 	ssize_t nchars;
@@ -131,7 +132,7 @@ int main(void) {
 				{
 				case 1:
 					start = high_resolution_clock::now();
-					result = a_search(init, heuristic, true, generatedNodes, start);
+					result_a = a_search(init, heuristic, true, generatedNodes, start);
 					break;
 				
 				case 2:
@@ -153,15 +154,27 @@ int main(void) {
 					resultFile << "Error code " << e << endl;
 				}
 				result.clear();
-				
+				result_a = 0;
 			}
 			
 
 			auto stop = high_resolution_clock::now();
 
 			duration<double> total = stop - start;
-			cout << "time: " << total.count() << " s\t" << "solution length: " << result.size() << endl;
-			resultFile << "time: " << total.count() << " s\t" << "solution length: " << result.size() << endl;
+			cout << "time: " << total.count() << " s\t";
+			resultFile << "time: " << total.count() << " s\t";
+			switch (alg)
+			{
+			case 1:
+				cout << "solution cost: " << result_a << endl;
+				resultFile << "solution cost: " << result_a << endl;
+				break;
+			
+			case 2:
+				cout << "solution length: " << result.size() << endl;
+				resultFile << "solution length: " << result.size() << endl;
+				break;
+			}
 			cout << "generated nodes: " << generatedNodes << endl;
 			resultFile << "generated nodes: " << generatedNodes << endl;
     	}
