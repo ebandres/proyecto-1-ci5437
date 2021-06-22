@@ -46,7 +46,15 @@ int main(void) {
 	char str[300 + 1]; // Para la prueba se pone una representación del estado en string
 	ssize_t nchars;
 
-	cout << "Input option:\n\t1 Manhattan\n\t2 PDB" << endl;
+	cout << "Select algorithm:\n\t1 - A*\n\t2 - IDA*" << endl;
+	if (fgets(str, sizeof(str), stdin) == NULL) {
+		cout << "No input" << endl;
+		return 1;
+	}
+
+	int alg = atoi(str); // For later
+
+	cout << "Input option:\n\t1 - Manhattan\n\t2 - PDB" << endl;
 	if (fgets(str, sizeof(str), stdin) == NULL) {
 		cout << "No input" << endl;
 		return 1; 
@@ -74,7 +82,18 @@ int main(void) {
 	{
 		resultFile.open("results.txt", ios::out | ios::trunc);
 
-		resultFile << "These results were obtained using IDA* with ";
+		resultFile << "These results were obtained using ";
+
+		switch (alg)
+		{
+		case 1:
+			resultFile << "A* with ";
+			break;
+		
+		case 2:
+			resultFile << "IDA* with ";
+			break;
+		}
 
 		switch (selection)
 		{
@@ -104,11 +123,22 @@ int main(void) {
 
 			int64_t generatedNodes = 1;
 
-			auto start = high_resolution_clock::now();
+			time_point<high_resolution_clock> start;
 
 			try
 			{
-				result = ida_search(init, heuristic, true, generatedNodes, start);
+				switch (alg)
+				{
+				case 1:
+					start = high_resolution_clock::now();
+					result = a_search(init, heuristic, true, generatedNodes, start);
+					break;
+				
+				case 2:
+					start = high_resolution_clock::now();
+					result = ida_search(init, heuristic, true, generatedNodes, start);
+					break;
+				}
 			}
 			catch(int e)
 			{

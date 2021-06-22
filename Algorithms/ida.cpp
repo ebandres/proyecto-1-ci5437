@@ -1,4 +1,6 @@
 #include "ida.h"
+#include "priority_queue.hpp"
+#include "clases.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -116,6 +118,11 @@ vector<int> ida_search(state_t *init,unsigned (*heuristic) (state_t), bool pruni
 	return path;
 }
 
+///////////// A STAR
+
+vector<int> a_search(state_t *init, unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes, time_point<high_resolution_clock> st) {
+	cout << "\naaaaa" << endl;
+}
 
 /*int main() {
 

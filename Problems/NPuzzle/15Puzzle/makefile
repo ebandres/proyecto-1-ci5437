@@ -55,11 +55,18 @@ abstractor:
 	$(CXX) $(OPT) ../../../psvn/global/dist_pdb.cpp -include $< -o $@
 	rm -f $*.c
 
+priority_queue.hpp:
+	cp ../../../Algorithms/priority_queue.hpp ./priority_queue.hpp
+
+clases.cpp:
+	cp ../../../Algorithms/clases.cpp ./clases.cpp
+	cp ../../../Algorithms/clases.h ./clases.h
+
 main: ida.o main.o
 	$(CXX) -o main ida.o main.o
-	rm -f ida.o main.o ida.h ida.cpp
+	rm -f ida.o main.o ida.h ida.cpp priority_queue.hpp clases.cpp clases.h
 
-ida.o: ida.cpp 15puzzle.c
+ida.o: ida.cpp 15puzzle.c priority_queue.hpp clases.cpp
 	$(CXX) -c ida.cpp -include 15puzzle.c
 
 main.o: main.cpp ida.h 15puzzle.c
