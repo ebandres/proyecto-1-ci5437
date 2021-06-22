@@ -23,9 +23,6 @@ psvn2c_abstraction.c:
 
 .PRECIOUS: %.c
 
-priority_queue.hpp:
-	cp ../../../psvn/global/priority_queue.hpp ./priority_queue.hpp
-
 
 %.succ: %.c ../../../psvn/global/succ.c
 	$(CC) $(OPT) ../../../psvn/global/succ.c -include $< -o $@

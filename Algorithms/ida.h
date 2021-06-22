@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "sys/types.h"
-#include "sys/sysinfo.h"
 #include "priority_queue.hpp"
 
 using namespace std;
