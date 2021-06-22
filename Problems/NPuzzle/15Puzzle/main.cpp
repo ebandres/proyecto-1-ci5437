@@ -20,7 +20,26 @@ using namespace std::chrono;
 
 unsigned (*heuristic) (state_t);
 
+ifstream myFile;
+ofstream resultFile;
+
+void signal_callback_handler(int signum) {
+	if (myFile.is_open())
+	{
+		myFile.close();
+	}
+
+	if (resultFile.is_open())
+	{
+		resultFile << "\nProgram terminated by user" << endl;
+		resultFile.close();
+	}
+	
+	exit(signum);
+}
+
 int main(void) {
+	signal(SIGINT, signal_callback_handler);
 
 	vector<int> result;
 	state_t *init = new state_t;
@@ -49,11 +68,25 @@ int main(void) {
 	}
 
 	string line;
-	ifstream myFile ("input.txt");
+	myFile.open("input.txt");
 
 	if (myFile.is_open()) 
 	{
-		ofstream resultFile ("results.txt", ios::out | ios::trunc);
+		resultFile.open("results.txt", ios::out | ios::trunc);
+
+		resultFile << "These results were obtained using IDA* with ";
+
+		switch (selection)
+		{
+		case 1:
+			resultFile << "Manhattan Heuristic" << endl;
+			break;
+		
+		case 2:
+			resultFile << "Additive PDB Heuristic" << endl;
+			break;
+		}
+		
 
 		while ( getline(myFile, line) )
     	{
