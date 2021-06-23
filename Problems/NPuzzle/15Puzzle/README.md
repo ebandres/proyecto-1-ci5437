@@ -1,9 +1,10 @@
 Crear el .c del archivo psvn:
-make topspin_12_4.c
+make 15puzzle.c
 
 Crear las PDBs correspondientes:
-make topspin_12_4/absTopSpin_1.pdb
-make topspin_12_4/absTopSpin_2.pdb
+make 15puzzle/abs15puzzle_1.pdb
+make 15puzzle/abs15puzzle_2.pdb
+make 15puzzle/abs15puzzle_3.pdb
 
 Crear el ejecutable:
 make main
