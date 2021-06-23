@@ -1,14 +1,13 @@
-map 17 4 0
-map 17 5 0
-map 17 6 0
-map 17 7 0
-map 17 8 0
-map 17 9 0
-map 17 10 0
-map 17 11 0
-map 17 12 0
-map 17 13 0
-map 17 14 0
-map 17 15 0
-map 17 16 0
-map 17 17 0 
+
+
+map 17 6 8
+map 17 7 8
+map 17 8 8
+map 17 9 8
+map 17 10 8
+map 17 11 8
+map 17 12 8
+map 17 13 8
+map 17 14 8
+map 17 15 8
+map 17 16 8

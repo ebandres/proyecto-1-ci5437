@@ -1,0 +1,148 @@
+These results were obtained using IDA* with Manhattan Heuristic
+
+state:
+14 1 9 6 4 8 12 5 7 2 3 B 10 11 13 15
+time: 0.043882 s	solution length: 45
+generated nodes: 68872
+
+state:
+6 14 10 5 15 8 7 1 3 4 2 B 12 9 11 13 
+time: 0.259341 s	solution length: 49
+generated nodes: 433468
+
+state:
+14 13 4 11 15 8 6 9 B 7 3 1 2 10 12 5 
+time: 2.27693 s	solution length: 56
+generated nodes: 3799056
+
+state:
+14 4 B 10 6 5 1 3 9 2 13 15 12 7 8 11 
+time: 13.5638 s	solution length: 48
+generated nodes: 21771701
+
+state:
+15 10 8 3 B 6 9 5 1 14 13 11 7 2 12 4 
+time: 72.9597 s	solution length: 57
+generated nodes: 120102994
+
+state:
+B 13 2 4 12 14 6 9 15 1 10 3 11 5 8 7 
+time: 5.92998 s	solution length: 54
+generated nodes: 9595495
+
+state:
+3 14 13 6 4 15 8 9 5 12 10 B 2 7 1 11 
+time: 3.97375 s	solution length: 53
+generated nodes: 6544858
+
+state:
+B 1 9 7 11 13 5 3 14 12 4 2 8 6 10 15 
+time: 0.159651 s	solution length: 42
+generated nodes: 254401
+
+state:
+11 B 15 8 13 12 3 5 10 1 4 6 14 9 7 2 
+time: 41.9905 s	solution length: 57
+generated nodes: 69059079
+
+state:
+13 B 9 12 11 6 3 5 15 8 1 10 4 14 2 7 
+time: 3.03293 s	solution length: 53
+generated nodes: 5073362
+
+state:
+14 10 2 1 13 9 8 11 7 3 6 12 15 5 4 B 
+Time limit reached
+time: 900.006 s	solution length: 0
+generated nodes: 1484788778
+
+state:
+12 3 9 1 4 5 10 2 6 11 15 B 14 7 13 8 
+time: 11.5501 s	solution length: 49
+generated nodes: 19016797
+
+state:
+15 8 10 7 B 12 14 1 5 9 6 3 13 11 4 2 
+time: 102.236 s	solution length: 55
+generated nodes: 172524771
+
+state:
+4 7 13 10 1 2 9 6 12 8 14 5 3 B 11 15 
+time: 0.790922 s	solution length: 44
+generated nodes: 1279410
+
+state:
+6 B 5 10 11 12 9 2 1 7 4 3 14 8 13 15 
+time: 0.711098 s	solution length: 45
+generated nodes: 1164083
+
+state:
+9 5 11 10 13 B 2 1 8 6 14 12 4 7 3 15 
+time: 31.0949 s	solution length: 52
+generated nodes: 50652519
+
+state:
+15 2 12 11 14 13 9 5 1 3 8 7 B 10 6 4 
+Time limit reached
+time: 900.001 s	solution length: 0
+generated nodes: 1471863161
+
+state:
+11 1 7 4 10 13 3 8 9 14 B 15 6 5 2 12 
+time: 47.322 s	solution length: 54
+generated nodes: 76401506
+
+state:
+5 4 7 1 11 12 14 15 10 13 8 6 2 B 9 3 
+time: 1.73228 s	solution length: 50
+generated nodes: 2746423
+
+state:
+9 7 5 2 14 15 12 10 11 3 6 1 8 13 B 4 
+time: 187.47 s	solution length: 57
+generated nodes: 305965267
+
+state:
+3 2 7 9 B 15 12 4 6 11 5 14 8 13 10 1 
+time: 394.172 s	solution length: 57
+generated nodes: 644759941
+
+state:
+13 9 14 6 12 8 1 2 3 4 B 7 5 10 11 15 
+time: 1.90948 s	solution length: 46
+generated nodes: 2970051
+
+state:
+5 7 11 8 B 14 9 13 10 12 3 15 6 1 4 2 
+time: 0.437377 s	solution length: 53
+generated nodes: 665956
+
+state:
+4 3 6 13 7 15 9 B 10 5 8 11 2 12 1 14 
+time: 5.77767 s	solution length: 50
+generated nodes: 9124534
+
+state:
+1 7 15 14 2 6 4 9 12 11 13 3 B 8 5 10 
+time: 7.48668 s	solution length: 49
+generated nodes: 11708501
+
+state:
+9 14 5 7 8 15 1 2 10 4 13 6 12 B 11 3 
+time: 1.18935 s	solution length: 44
+generated nodes: 1939158
+
+state:
+B 11 3 12 5 2 1 9 8 10 14 15 7 4 13 6 
+time: 52.1825 s	solution length: 54
+generated nodes: 83196912
+
+state:
+7 15 4 B 10 9 2 5 12 11 13 6 1 3 14 8 
+time: 34.9091 s	solution length: 57
+generated nodes: 57487483
+
+state:
+11 4 B 8 6 10 5 13 12 7 14 3 1 2 9 15 
+time: 23.4774 s	solution length: 54
+generated nodes: 37955588

@@ -156,6 +156,7 @@ int a_search(state_t *init, unsigned (*heuristic) (state_t), bool pruning, int64
 		if (prev_g == NULL || !compare_states(&curr_state, init) || curr_g < *prev_g) {
 			state_map_add(costs, &curr_state, curr_g);
 			if (is_goal(&curr_state)) {
+				//print_state(stdout, &curr_state);
 				return curr_g;
 			}
 
