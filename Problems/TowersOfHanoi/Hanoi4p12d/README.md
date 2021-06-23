@@ -11,3 +11,5 @@ make main
 Luego correr main e introducir un caso de prueba.
 ./main 
  
+Input contiene los estados iniciales de hanoi_4p12d=005
+Se ejecuto en Google Colab
