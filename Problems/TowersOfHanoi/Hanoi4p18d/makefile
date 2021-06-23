@@ -63,10 +63,10 @@ clases.cpp:
 	cp ../../../Algorithms/clases.h ./clases.h
 
 ida.o: ida.cpp priority_queue.hpp clases.cpp
-	$(CXX) -c ida.cpp -include hanoi_4p14d.c
+	$(CXX) -c ida.cpp -include hanoi_4p18d.c
 
 main.o: main.cpp ida.h
-	$(CXX) -c main.cpp -include hanoi_4p14d.c -include heuristicas.cpp
+	$(CXX) -c main.cpp -include hanoi_4p18d.c -include heuristicas.cpp
 
 ida.cpp: 
 	cp  ../../../Algorithms/ida.cpp ./ida.cpp

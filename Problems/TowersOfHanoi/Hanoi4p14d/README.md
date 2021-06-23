@@ -12,3 +12,4 @@ Luego correr main e introducir un caso de prueba.
 ./main 
   
 Input tiene estados iniciales de hanoi_4p14d.d=015
+Fue corrido en Google Colab
