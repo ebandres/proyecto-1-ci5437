@@ -54,7 +54,7 @@ int main(void) {
 
 	int alg = atoi(str); // For later
 
-	cout << "Input option:\n\t1 - Manhattan\n\t2 - PDB" << endl;
+	cout << "Input option:\n\t1 - Manhattan\n\t2 - Additive PDB" << endl;
 	if (fgets(str, sizeof(str), stdin) == NULL) {
 		cout << "No input" << endl;
 		return 1; 
@@ -80,7 +80,8 @@ int main(void) {
 
 	if (myFile.is_open()) 
 	{
-		resultFile.open("results.txt", ios::out | ios::trunc);
+		string filename = "results_" + to_string(alg) + "_" + to_string(selection) + ".txt";
+		resultFile.open(filename, ios::out | ios::trunc);
 
 		resultFile << "These results were obtained using ";
 
