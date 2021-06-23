@@ -11,3 +11,4 @@ make main
 Luego correr main e introducir un caso de prueba.
 ./main
 
+Los resultados usaron los estados iniciales de topspin_12_4.d=2000000

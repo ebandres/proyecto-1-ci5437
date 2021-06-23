@@ -23,10 +23,6 @@ psvn2c_abstraction.c:
 
 .PRECIOUS: %.c
 
-priority_queue.hpp:
-	cp ../../../psvn/global/priority_queue.hpp ./priority_queue.hpp
-
-
 %.succ: %.c ../../../psvn/global/succ.c
 	$(CC) $(OPT) ../../../psvn/global/succ.c -include $< -o $@
 	rm -f $*.c
@@ -57,14 +53,20 @@ abstractor:
 
 main: ida.o main.o
 	$(CXX) -o main ida.o main.o
-	rm -f ida.o main.o
+	rm -f ida.o main.o ida.h ida.cpp priority_queue.hpp clases.cpp clases.h
 
+priority_queue.hpp:
+	cp ../../../Algorithms/priority_queue.hpp ./priority_queue.hpp
 
-ida.o: ida.cpp
-	$(CXX) -c ida.cpp -include hanoi_4p18d.c
+clases.cpp:
+	cp ../../../Algorithms/clases.cpp ./clases.cpp
+	cp ../../../Algorithms/clases.h ./clases.h
+
+ida.o: ida.cpp priority_queue.hpp clases.cpp
+	$(CXX) -c ida.cpp -include hanoi_4p14d.c
 
 main.o: main.cpp ida.h
-	$(CXX) -c main.cpp -include hanoi_4p18d.c -include heuristicas.cpp
+	$(CXX) -c main.cpp -include hanoi_4p14d.c -include heuristicas.cpp
 
 ida.cpp: 
 	cp  ../../../Algorithms/ida.cpp ./ida.cpp

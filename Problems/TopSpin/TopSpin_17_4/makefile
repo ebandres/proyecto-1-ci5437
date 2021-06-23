@@ -42,7 +42,7 @@ abstractor:
 	@rm -f `basename $*`.abst `basename $*`.pdb `basename $*`.psvn
 	@echo "**** Running abstractor on `dirname $*`.psvn with `basename $*`.txt ..."
 	@./abstractor `dirname $*`.psvn `basename $*` < `basename $*`.txt > /dev/null
-	@mingw32-make `basename $*`.distSummary
+	@make `basename $*`.distSummary
 	@echo "**** Constructing PDB `basename $*`.pdb ..."
 	@./`basename $*`.distSummary `basename $*`.pdb
 	@rm -f abstractor `basename $*`.distSummary

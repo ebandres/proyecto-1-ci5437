@@ -4,3 +4,4 @@ src2/xsnombre.exe
 src2/loquesea.exe
 *.exe
 *.o
+*.abst
