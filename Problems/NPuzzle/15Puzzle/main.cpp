@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "sys/types.h"
-#include "sys/sysinfo.h"
 #include "ida.h"
 
 using namespace std;
@@ -55,7 +54,7 @@ int main(void) {
 
 	int alg = atoi(str); // For later
 
-	cout << "Input option:\n\t1 - PDB" << endl;
+	cout << "Input option:\n\t1 - Manhattan\n\t2 - PDB" << endl;
 	if (fgets(str, sizeof(str), stdin) == NULL) {
 		cout << "No input" << endl;
 		return 1; 
@@ -67,6 +66,10 @@ int main(void) {
 	switch (selection)
 	{
 	case 1:
+		set_manhattan();
+		heuristic = manhattan;
+		break;
+	case 2:
 		set_pdb();
 		heuristic = pdb_add;
 		break;
@@ -95,6 +98,10 @@ int main(void) {
 		switch (selection)
 		{
 		case 1:
+			resultFile << "Manhattan Heuristic" << endl;
+			break;
+		
+		case 2:
 			resultFile << "Additive PDB Heuristic" << endl;
 			break;
 		}

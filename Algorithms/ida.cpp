@@ -6,6 +6,8 @@ using namespace std::chrono;
 
 state_t *state;
 vector<int> path;
+time_point<high_resolution_clock> start_time;
+double time_limit = 900;
 //unsigned (*heuristic) (state_t);
 
 
@@ -27,6 +29,15 @@ void revert_rule(int ruleid, state_t *state) {
 }
 
 pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*heuristic) (state_t),bool pruning, int history, int64_t &generatedNodes) {
+	// Check time limit
+	auto curr_time = high_resolution_clock::now();
+	duration<double> elapsed = curr_time - start_time;
+	if (elapsed.count() > time_limit)
+	{
+		throw 3;
+	}
+	
+	
 	// base cases
 	unsigned h = heuristic(*state);
 	unsigned f = g + h;
@@ -82,7 +93,9 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*he
 	return {false,t};
 }
 
-vector<int> ida_search(state_t *init,unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes) {
+vector<int> ida_search(state_t *init,unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes, time_point<high_resolution_clock> st) {
+	path.clear();
+	start_time = st;
 	generatedNodes = 1;
 	state = init;
 	unsigned bound = heuristic(*state);
@@ -103,6 +116,65 @@ vector<int> ida_search(state_t *init,unsigned (*heuristic) (state_t), bool pruni
 	return path;
 }
 
+///////////// A STAR
+
+int a_search(state_t *init, unsigned (*heuristic) (state_t), bool pruning, int64_t &generatedNodes, time_point<high_resolution_clock> st) {
+	path.clear();
+	start_time = st;
+	generatedNodes = 1;
+
+	time_point<high_resolution_clock> curr_time;
+	
+	PriorityQueue<state_t> q;
+	state_t curr_state;
+	state_t child_state;
+	int curr_g;
+    int *prev_g;
+    int child_h;
+    int child_g;
+    int ruleid;
+    ruleid_iterator_t iter;
+	state_map_t *costs = new_state_map();
+
+	state_map_add(costs, init, 0);
+	q.Add(0, 0, *init);
+
+	while (!q.Empty()) {
+		curr_state = q.Top();
+		curr_g = q.CurrentPriority();
+		q.Pop();
+
+		curr_time = high_resolution_clock::now();
+		duration<double> elapsed = curr_time - start_time;
+		if (elapsed.count() > time_limit)
+		{
+			throw 3;
+		}
+
+		prev_g = state_map_get(costs, &curr_state);
+
+		if (prev_g == NULL || !compare_states(&curr_state, init) || curr_g < *prev_g) {
+			state_map_add(costs, &curr_state, curr_g);
+			if (is_goal(&curr_state)) {
+				return curr_g;
+			}
+
+			generatedNodes++;
+
+			init_fwd_iter(&iter, &curr_state);
+			while ((ruleid = next_ruleid(&iter)) >= 0) {
+				apply_fwd_rule(ruleid, &curr_state, &child_state);
+				child_h = heuristic(child_state);
+
+				if (child_h < INT_MAX) {
+					child_g = curr_g + get_fwd_rule_cost(ruleid);
+					q.Add(child_g + child_h, child_g, child_state);
+				}
+			}
+		}
+	}
+	return -1;
+}
 
 /*int main() {
 
