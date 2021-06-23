@@ -10,3 +10,5 @@ make main
 
 Luego correr main e introducir un caso de prueba.
 ./main 
+
+Se utilizo los estados iniciales de topspin_14_4.d=010

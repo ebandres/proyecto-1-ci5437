@@ -1,0 +1,4 @@
+abstraction {
+  12 { 0 1 2 3 4 0 0 0 0 9 10 11 }
+  projection { K K K K K K K K K K K K }
+}

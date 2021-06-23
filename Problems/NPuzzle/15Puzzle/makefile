@@ -23,7 +23,6 @@ psvn2c_abstraction.c:
 
 .PRECIOUS: %.c
 
-
 %.succ: %.c ../../../psvn/global/succ.c
 	$(CC) $(OPT) ../../../psvn/global/succ.c -include $< -o $@
 	rm -f $*.c
