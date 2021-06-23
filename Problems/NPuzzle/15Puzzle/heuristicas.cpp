@@ -19,17 +19,17 @@ state_t abst_state3;
 unsigned mtable[16][16];
 
 void set_pdb(void){
-	FILE *f1 = fopen("15-puzzle_1-2-3-6-7.pdb","r");
-	FILE *f2 = fopen("15-puzzle_4-5-8-9-12.pdb","r");
-	FILE *f3 = fopen("15-puzzle_10-11-13-14-15.pdb","r");
+	FILE *f1 = fopen("abs15puzzle_1.pdb","r");
+	FILE *f2 = fopen("abs15puzzle_2.pdb","r");
+	FILE *f3 = fopen("abs15puzzle_3.pdb","r");
 
 	pdb1 = read_state_map(f1);
 	pdb2 = read_state_map(f2);
 	pdb3 = read_state_map(f3);
 
-	abs1 = read_abstraction_from_file("15-puzzle_1-2-3-6-7.abst");
-    abs2 = read_abstraction_from_file("15-puzzle_4-5-8-9-12.abst");
-    abs3 = read_abstraction_from_file("15-puzzle_10-11-13-14-15.abst");
+	abs1 = read_abstraction_from_file("abs15puzzle_1.abst");
+    abs2 = read_abstraction_from_file("abs15puzzle_2.abst");
+    abs3 = read_abstraction_from_file("abs15puzzle_3.abst");
 
 	fclose(f1);
 	fclose(f2);

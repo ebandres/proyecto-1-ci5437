@@ -104,3 +104,45 @@ generated nodes: 305965267
 
 state:
 3 2 7 9 B 15 12 4 6 11 5 14 8 13 10 1 
+time: 394.172 s	solution length: 57
+generated nodes: 644759941
+
+state:
+13 9 14 6 12 8 1 2 3 4 B 7 5 10 11 15 
+time: 1.90948 s	solution length: 46
+generated nodes: 2970051
+
+state:
+5 7 11 8 B 14 9 13 10 12 3 15 6 1 4 2 
+time: 0.437377 s	solution length: 53
+generated nodes: 665956
+
+state:
+4 3 6 13 7 15 9 B 10 5 8 11 2 12 1 14 
+time: 5.77767 s	solution length: 50
+generated nodes: 9124534
+
+state:
+1 7 15 14 2 6 4 9 12 11 13 3 B 8 5 10 
+time: 7.48668 s	solution length: 49
+generated nodes: 11708501
+
+state:
+9 14 5 7 8 15 1 2 10 4 13 6 12 B 11 3 
+time: 1.18935 s	solution length: 44
+generated nodes: 1939158
+
+state:
+B 11 3 12 5 2 1 9 8 10 14 15 7 4 13 6 
+time: 52.1825 s	solution length: 54
+generated nodes: 83196912
+
+state:
+7 15 4 B 10 9 2 5 12 11 13 6 1 3 14 8 
+time: 34.9091 s	solution length: 57
+generated nodes: 57487483
+
+state:
+11 4 B 8 6 10 5 13 12 7 14 3 1 2 9 15 
+time: 23.4774 s	solution length: 54
+generated nodes: 37955588
