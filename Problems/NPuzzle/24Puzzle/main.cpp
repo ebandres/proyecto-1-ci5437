@@ -61,15 +61,12 @@ int main(void) {
 	}
 	cout << endl;
 
-	int selection = atoi(str);
+	int selection = atoi(str); // Leftover from multiple option selection
 
-	switch (selection)
-	{
-	case 1:
-		set_pdb();
-		heuristic = pdb_add;
-		break;
-	}
+
+	set_pdb();
+	heuristic = pdb_add;
+	
 
 	string line;
 	myFile.open("input.txt");
@@ -92,17 +89,9 @@ int main(void) {
 			break;
 		}
 
-		switch (selection)
-		{
-		case 1:
-			resultFile << "Manhattan Heuristic" << endl;
-			break;
-		
-		case 2:
-			resultFile << "Additive PDB Heuristic" << endl;
-			break;
-		}
-		
+
+		resultFile << "Additive PDB Heuristic" << endl;
+
 
 		while ( getline(myFile, line) )
     	{
