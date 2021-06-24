@@ -49,15 +49,16 @@ void bounded_dfs_visit(Node *node, unsigned depth, unsigned bound, const int his
         init_fwd_iter(&iter, &(node->state));
 
         while((ruleid = next_ruleid(&iter)) >= 0) {
-            if( fwd_rule_valid_for_history(history, ruleid) == 0){
-                continue; 
-            }
+            //if( fwd_rule_valid_for_history(history, ruleid) == 0){
+            //    continue; 
+            //}
             apply_fwd_rule(ruleid, &(node->state), &child_state);
 
             Node child_node(child_state, node, ruleid, 0); 
 
-            int new_history = next_fwd_history(history, ruleid);
-            bounded_dfs_visit(&child_node, depth + 1, bound, new_history);  
+            //int new_history = next_fwd_history(history, ruleid);
+            // En la llamada a bounded_dfs_visit originalmente tiene new_history
+            bounded_dfs_visit(&child_node, depth + 1, bound, history);  
         }
     }
 }
