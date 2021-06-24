@@ -11,7 +11,6 @@
 #define  MAX_LINE_LENGTH 999
 using namespace std;
 
-typedef unsigned Action;
 
 class State {
 	public:
@@ -20,22 +19,22 @@ class State {
 	int  ruleid;
 
 	bool isGoalState();
-	list<pair<State,Action>> succesors();
+	list<pair<State,int>> succesors();
 };
 
 // Object Node
 class Node {
 	public:
-		State state;
+		state_t state;
 		Node* parent;
-		Action action;
+		int ruleid;
 		unsigned g;
 
-		Node(State state1, Node* parent1, Action action1, unsigned g1);
+		Node(state_t state1, Node* parent1, int ruleid1, unsigned g1);
 
-		Node* make_node(State state, Node* parent, Action action);
+		Node* make_node(state_t state, Node* parent, int ruleid);
 
-		void extract_path(vector<Action> &reversed_path, Node nodito);
+		void extract_path(vector<int> &reversed_path, Node nodito);
 };
 
-Node make_root_node(State state);
+Node make_root_node(state_t state);
