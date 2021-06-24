@@ -14,13 +14,9 @@
 using namespace std;
 using namespace std::chrono;
 
-//state_t *state;
-//vector<int> path;
-//unsigned (*heuristic) (state_t);
+void get_next(int ruleid, state_t *state);
 
-void apply_rule(int ruleid, state_t *state);
-
-void revert_rule(int ruleid, state_t *state);
+void get_prev(int ruleid, state_t *state);
 
 pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*heuristic) (state_t),bool pruning, int history, int64_t &generatedNodes);
 
