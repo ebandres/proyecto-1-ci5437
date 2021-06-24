@@ -1,33 +1,32 @@
+// El archivo se llama ida pero también contiene A*
 #include "ida.h"
 
 using namespace std;
 using namespace std::chrono;
 
-
+//Variables globales
 state_t *state;
 vector<int> path;
 time_point<high_resolution_clock> start_time;
 double time_limit = 900;
-//unsigned (*heuristic) (state_t);
-
 
 // Genera un sucesor del estado 
-void apply_rule(int ruleid, state_t *state) {
+void get_next(int ruleid, state_t *state) {
 	// No se puede sobreescribir un estado directamente :) y hay que pasar el
 	// state como apuntador para que si se guarden los cambios
 	state_t state_aux;
 	copy_state(&state_aux, state);
 	apply_fwd_rule(ruleid, &state_aux, state);
-	//print_state(stdout, state);
 }
 
 // Generar el padre del estado
-void revert_rule(int ruleid, state_t *state) {
+void get_prev(int ruleid, state_t *state) {
 	state_t state_aux;
 	copy_state(&state_aux, state);
 	apply_bwd_rule(ruleid, &state_aux, state);
 }
 
+// Código recursivo del IDA*
 pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*heuristic) (state_t),bool pruning, int history, int64_t &generatedNodes) {
 	// Check time limit
 	auto curr_time = high_resolution_clock::now();
@@ -37,8 +36,7 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*he
 		throw 3;
 	}
 	
-	
-	// base cases
+	// casos base
 	unsigned h = heuristic(*state);
 	unsigned f = g + h;
 
@@ -60,8 +58,9 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*he
 
 	generatedNodes += 1;
 
+	// Inicializando el iterador
 	init_fwd_iter( &iter, state);
-	// En par.first esta el estado y en par.second el ruleid de la regla que lo generó 
+	// Iterando sobre los sucesores
 	while ((ruleid=next_ruleid(&iter)) >= 0) {
 
 	    if (pruning) {
@@ -73,8 +72,7 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*he
 
 		cost = g + get_fwd_rule_cost(ruleid);
 
-		apply_rule(ruleid, state);
-		//print_state(stdout, state);
+		get_next(ruleid, state);
 
 		if (heuristic(*state) < UINT_MAX) {
 			path.push_back(ruleid);
@@ -88,7 +86,7 @@ pair<bool,unsigned> f_bounded_dfs_visit(unsigned bound, unsigned g,unsigned (*he
 			path.pop_back();
 		}
 
-		revert_rule(ruleid, state);
+		get_prev(ruleid, state);
 	}
 	return {false,t};
 }
@@ -101,7 +99,7 @@ vector<int> ida_search(state_t *init,unsigned (*heuristic) (state_t), bool pruni
 	unsigned bound = heuristic(*state);
 	pair<bool,unsigned> p;
 	int hist = init_history;
-	// Search with increasing f-value bounds
+	
 	while (bound != UINT_MAX) {
 
 		p = f_bounded_dfs_visit(bound, 0,heuristic, pruning, hist, generatedNodes);
@@ -154,9 +152,11 @@ int a_search(state_t *init, unsigned (*heuristic) (state_t), bool pruning, int64
 		prev_g = state_map_get(costs, &curr_state);
 
 		if (prev_g == NULL || !compare_states(&curr_state, init) || curr_g < *prev_g) {
+			//Actualizar los costos si se consiguió alguno menor para un estado previamente encontrado, 
+			// o añadir un estado nuevo con su respectivo costo
 			state_map_add(costs, &curr_state, curr_g);
+
 			if (is_goal(&curr_state)) {
-				//print_state(stdout, &curr_state);
 				return curr_g;
 			}
 
@@ -177,43 +177,3 @@ int a_search(state_t *init, unsigned (*heuristic) (state_t), bool pruning, int64
 	return -1;
 }
 
-/*int main() {
-
-	vector<int> result;
-	state_t *init;
-	char str[100 + 1] = "14 1 9 6 4 8 12 5 7 2 3 B 10 11 13 15"; // Para la prueba se pone una representación del estado en string
-	//char str[100 + 1] = "B 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"; 
-	ssize_t nchars = read_state(str, init); // Esto convierte el str a un estado de psvn
-
-	cout << "Input option:\n\t1 Manhattan\n\t2 PDB" << endl;
-	if (fgets(str, sizeof(str), stdin) == NULL) {
-		cout << "No input.\n";
-		return 1; 
-	}
-
-	int selection = atoi(str);
-
-	switch (selection)
-	{
-	case 1:
-		cout << "man" << endl;
-		set_manhattan();
-		heuristic = manhattan;
-		break;
-	case 2:
-		cout << "pdb" << endl;
-		set_pdb();
-		heuristic = pdb_add;
-		break;
-	}
-
-	auto start = high_resolution_clock::now();
-
-	result = ida_search(init,true);
-	//unsigned test = heuristic(*init);
-	//cout << "HEURISTIC VALUE: " << test << endl;
-	auto stop = high_resolution_clock::now();
-	duration<double> total = stop - start;
-	cout << "time: " << total.count() << " segundos" << endl;
-}
-*/
