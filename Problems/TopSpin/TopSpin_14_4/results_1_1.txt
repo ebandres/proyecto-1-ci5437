@@ -2,50 +2,50 @@ These results were obtained using A* with Max PDB Heuristic
 
 state:
 9 7 1 0 3 4 5 10 2 6 12 8 11 13
-time: 1.06379 s	solution cost: 54
-generated nodes: 120047
+time: 1.84315 s	solution cost: 51
+generated nodes: 257859
 
 state:
 4 5 6 3 10 11 1 7 8 9 2 12 0 13
-time: 1.23025 s	solution cost: 54
-generated nodes: 150163
+time: 2.8813 s	solution cost: 53
+generated nodes: 395190
 
 state:
 4 9 10 1 5 8 11 12 2 3 7 6 0 13
-time: 0.053858 s	solution cost: 36
-generated nodes: 6855
+time: 0.035942 s	solution cost: 33
+generated nodes: 5297
 
 state:
 9 5 3 11 10 6 0 4 7 1 2 12 8 13
-time: 0.964442 s	solution cost: 54
-generated nodes: 104854
+time: 0.289225 s	solution cost: 47
+generated nodes: 39781
 
 state:
 4 10 2 5 6 7 0 12 11 9 3 8 1 13
-time: 1.50235 s	solution cost: 54
-generated nodes: 175388
+time: 1.89195 s	solution cost: 50
+generated nodes: 268175
 
 state:
 9 6 11 3 1 0 12 7 8 2 10 5 4 13
-time: 1.32484 s	solution cost: 55
-generated nodes: 168094
+time: 0.487698 s	solution cost: 49
+generated nodes: 70190
 
 state:
 7 3 8 1 4 5 6 12 10 0 2 11 9 13
-time: 0.697171 s	solution cost: 54
-generated nodes: 88711
+time: 0.462763 s	solution cost: 45
+generated nodes: 65130
 
 state:
 0 7 6 5 4 8 9 1 10 2 3 12 11 13
-time: 0.00097 s	solution cost: 21
-generated nodes: 245
+time: 0.002991 s	solution cost: 21
+generated nodes: 409
 
 state:
 9 12 11 0 7 1 2 3 8 6 5 4 10 13
-time: 0.032914 s	solution cost: 36
-generated nodes: 4301
+time: 0.10774 s	solution cost: 35
+generated nodes: 15228
 
 state:
 7 2 0 3 4 8 1 6 5 9 10 12 11 13
-time: 0.029921 s	solution cost: 36
-generated nodes: 3826
+time: 0.041925 s	solution cost: 35
+generated nodes: 6119

@@ -2,38 +2,38 @@ These results were obtained using IDA* with Max PDB Heuristic
 
 state:
 9 7 1 0 3 4 5 10 2 6 12 8 11 13
-time: 0.000997 s	solution length: 10
-generated nodes: 111
+time: 0.007987 s	solution length: 10
+generated nodes: 873
 
 state:
 4 5 6 3 10 11 1 7 8 9 2 12 0 13
-time: 0.000997 s	solution length: 10
-generated nodes: 112
+time: 0.005984 s	solution length: 10
+generated nodes: 750
 
 state:
 4 9 10 1 5 8 11 12 2 3 7 6 0 13
 time: 0 s	solution length: 8
-generated nodes: 11
+generated nodes: 27
 
 state:
 9 5 3 11 10 6 0 4 7 1 2 12 8 13
-time: 0 s	solution length: 10
-generated nodes: 26
+time: 0.000998 s	solution length: 10
+generated nodes: 171
 
 state:
 4 10 2 5 6 7 0 12 11 9 3 8 1 13
-time: 0.001995 s	solution length: 10
-generated nodes: 224
+time: 0.011968 s	solution length: 10
+generated nodes: 1638
 
 state:
 9 6 11 3 1 0 12 7 8 2 10 5 4 13
-time: 0.000998 s	solution length: 10
-generated nodes: 109
+time: 0.001994 s	solution length: 10
+generated nodes: 297
 
 state:
 7 3 8 1 4 5 6 12 10 0 2 11 9 13
-time: 0 s	solution length: 10
-generated nodes: 36
+time: 0.005025 s	solution length: 10
+generated nodes: 736
 
 state:
 0 7 6 5 4 8 9 1 10 2 3 12 11 13
@@ -42,10 +42,10 @@ generated nodes: 7
 
 state:
 9 12 11 0 7 1 2 3 8 6 5 4 10 13
-time: 0 s	solution length: 8
-generated nodes: 9
+time: 0.000997 s	solution length: 8
+generated nodes: 46
 
 state:
 7 2 0 3 4 8 1 6 5 9 10 12 11 13
 time: 0 s	solution length: 8
-generated nodes: 9
+generated nodes: 20
