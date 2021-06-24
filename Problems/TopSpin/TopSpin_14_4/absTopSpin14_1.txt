@@ -3,4 +3,6 @@ map 14 2 0
 map 14 3 0
 map 14 4 0
 map 14 5 0
+map 14 6 0
+map 14 7 0
  
