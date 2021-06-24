@@ -1,0 +1,7 @@
+These results were obtained using IDA* with Manhattan Heuristic
+
+state:
+3 17 9 8 24 1 11 12 14 B 5 4 22 13 16 21 15 6 7 10 20 23 2 18 19
+Time limit reached
+time: 900.01 s	solution length: 0
+generated nodes: 160010563
