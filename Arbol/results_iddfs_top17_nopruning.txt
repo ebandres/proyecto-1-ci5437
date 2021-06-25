@@ -1,0 +1,8 @@
+Depth	Num Nodes	Branching
+0	1	17
+1	17	17
+2	289	17
+3	4913	17
+4	83521	17
+5	1419857	17
+Time limit reached
